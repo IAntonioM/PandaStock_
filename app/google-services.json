@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "337679648493",
+    "project_id": "pandastock-41bd1",
+    "storage_bucket": "pandastock-41bd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337679648493:android:fb34f428ba34ca24442ee4",
+        "android_client_info": {
+          "package_name": "com.app.pandastock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBNu5SshzYHgYtD0iuH6k4gS1Dbt5BJd4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

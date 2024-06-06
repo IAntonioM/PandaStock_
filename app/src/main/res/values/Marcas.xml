@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="MarcasLaptop">
+        <item>---Seleccionar---</item>
+        <item>ASUS</item>
+        <item>LENOVO</item>
+    </string-array>
+
+    <string-array name="MarcasMouse">
+        <item>---Seleccionar---</item>
+        <item>Logitech</item>
+        <item>Cybertel</item>
+        <item>Microsoft</item>
+        <item>Razer</item>
+    </string-array>
+
+    <string-array name="MarcasTeclado">
+        <item>---Seleccionar---</item>
+        <item>Logitech</item>
+        <item>Hyper X</item>
+        <item>Antryx</item>
+        <item>Razer</item>
+    </string-array>
+
+    <string-array name="MarcasMonitor">
+        <item>---Seleccionar---</item>
+        <item>Samsung</item>
+        <item>HP</item>
+        <item>LG</item>
+        <item>Acer</item>
+    </string-array>
+</resources>

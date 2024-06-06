@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Productos">
+        <item>---Seleccionar---</item>
+        <item>Laptop</item>
+        <item>Mouse</item>
+        <item>Teclado</item>
+        <item>Monitor</item>
+    </string-array>
+</resources>
