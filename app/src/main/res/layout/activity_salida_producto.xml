@@ -178,7 +178,6 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="11dp"
         android:background="@drawable/estilo_borde"
-        android:entries="@array/Productos"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txvProducto" />
 

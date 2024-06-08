@@ -45,13 +45,13 @@
         android:id="@+id/txvCantidad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="22dp"
         android:text="Cantidad"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtModelo"
+        app:layout_constraintTop_toBottomOf="@+id/edtPrecio"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -64,7 +64,7 @@
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spnProducto"
+        app:layout_constraintTop_toBottomOf="@+id/spnTipoProducto"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -79,21 +79,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/snpMarca"
         tools:ignore="HardcodedText" />
-
-    <EditText
-        android:id="@+id/edtCantidad"
-        android:layout_width="274dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="83dp"
-        android:background="@drawable/estilo_borde"
-        android:ems="10"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/btndenegar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtModelo"
-        tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <ImageButton
         android:id="@+id/btnregresarp"
@@ -113,11 +98,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
         android:layout_marginEnd="43dp"
-        android:layout_marginBottom="132dp"
+        android:layout_marginBottom="64dp"
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.231"
+        app:layout_constraintHorizontal_bias="0.251"
         app:layout_constraintStart_toEndOf="@+id/btningresarp"
         app:srcCompat="@drawable/equis"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
@@ -126,8 +111,8 @@
         android:id="@+id/btningresarp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginBottom="132dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginBottom="64dp"
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -135,7 +120,7 @@
         tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,TouchTargetSizeCheck" />
 
     <EditText
-        android:id="@+id/edtModelo"
+        android:id="@+id/edtModelo1"
         android:layout_width="274dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="58dp"
@@ -147,13 +132,12 @@
         app:layout_constraintTop_toBottomOf="@+id/txvLote" />
 
     <Spinner
-        android:id="@+id/spnProducto"
+        android:id="@+id/spnTipoProducto"
         android:layout_width="272dp"
         android:layout_height="42dp"
         android:layout_marginStart="58dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/estilo_borde"
-        android:entries="@array/Productos"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txvProducto" />
 
@@ -162,8 +146,42 @@
         android:layout_width="272dp"
         android:layout_height="42dp"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/estilo_borde"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spnTipoProducto" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="22dp"
+        android:text="Precio"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtModelo1" />
+
+    <EditText
+        android:id="@+id/edtPrecio"
+        android:layout_width="278dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/estilo_borde"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <EditText
+        android:id="@+id/edtCantidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="310dp"
+        android:ems="10"
+        android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txvCantidad" />
 

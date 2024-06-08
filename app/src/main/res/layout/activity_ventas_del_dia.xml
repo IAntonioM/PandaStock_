@@ -92,7 +92,7 @@
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/edtCantidad"
+        android:id="@+id/edtModelo1"
         android:layout_width="87dp"
         android:layout_height="47dp"
         android:layout_marginStart="136dp"
@@ -137,7 +137,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtCantidad">
+        app:layout_constraintTop_toBottomOf="@+id/edtModelo1">
 
         <TableRow
             android:layout_width="match_parent"

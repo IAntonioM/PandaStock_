@@ -35,9 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
         concuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(RegisterActivity.this, "Ya tengo Cuenta",
-                        Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                finish();
             }
         });
 

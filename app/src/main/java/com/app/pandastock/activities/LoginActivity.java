@@ -19,7 +19,6 @@ public class LoginActivity extends AppCompatActivity {
 
     UsuarioDao userDao;
     SessionManager session;
-
     Button crear, ingresar;
     EditText email,password;
 
@@ -27,14 +26,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         userDao = new UsuarioDao(this);
-
         session = new SessionManager(this);
 
         email=findViewById(R.id.txtEmail);
         password=findViewById(R.id.txtPassword);
-
         crear = findViewById(R.id.btnCrearCuentaa);
 
         crear.setOnClickListener(new View.OnClickListener() {

@@ -51,7 +51,6 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:entries="@array/Productos"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
@@ -87,29 +86,10 @@
         android:layout_height="121dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="110dp"
-        android:background="#00858585"
+        android:stretchColumns="*"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner"
         tools:ignore="TextSizeCheck">
-
-        <TableRow>
-            <TextView
-                android:layout_weight="1"
-                android:text="Producto"
-                android:textStyle="bold"/>
-            <TextView
-                android:layout_weight="1"
-                android:text="Marca"
-                android:textStyle="bold"/>
-            <TextView
-                android:layout_weight="1"
-                android:text="Modelo"
-                android:textStyle="bold"/>
-            <TextView
-                android:layout_weight="1"
-                android:text="Stock"
-                android:textStyle="bold"/>
-        </TableRow>
 
 
     </TableLayout>

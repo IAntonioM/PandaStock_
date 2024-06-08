@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MenuActivity extends AppCompatActivity {
-    Button logout;
+    Button logout, escanear;
     ImageButton ingreso, salida, stock;
     SessionManager session;
     TextView useremail;
@@ -36,6 +36,7 @@ public class MenuActivity extends AppCompatActivity {
         ingreso = findViewById(R.id.btnIngresoProductos);
         logout = findViewById(R.id.btnLogout);
         salida = findViewById(R.id.btnSalida);
+        escanear=findViewById(R.id.btnEscanear);
         useremail = findViewById(R.id.txtUseremail);
         stock = findViewById(R.id.btnStock);
 
@@ -46,7 +47,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 session.logoutUser();
-                Toast.makeText(MenuActivity.this, "Cerrando Sesion",
+                Toast.makeText(MenuActivity.this, "Cerrando Sesion... ",
                         Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(MenuActivity.this, LoginActivity.class));
                 finish();
@@ -78,6 +79,13 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(new Intent(MenuActivity.this, ConsultarStockActivity.class));
             }
         });
+        escanear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MenuActivity.this, EscanearCodeBarActivity.class));
+            }
+        });
+
 
     }
 }
