@@ -71,8 +71,8 @@ public class ProductosActivity extends AppCompatActivity {
             Button btnEditar = cardView.findViewById(R.id.btnEditar);
             Button btnAgregarInventario = cardView.findViewById(R.id.btnAgregarInventario);
 
-            tvTipoProducto.setText(String.valueOf(producto.getTipoProductoId()));
-            tvMarca.setText(String.valueOf(producto.getMarcaId()));
+            tvTipoProducto.setText(String.valueOf(producto.getTipoProducto()));
+            tvMarca.setText(String.valueOf(producto.getMarca()));
             tvModelo.setText(producto.getModelo());
             tvStock.setText(String.valueOf(producto.getStock()));
             tvPrecio.setText(String.valueOf(producto.getPrecio()));

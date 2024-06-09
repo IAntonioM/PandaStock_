@@ -4,6 +4,8 @@ public class Producto {
     private int id;
     private int tipoProductoId;
     private int marcaId;
+    private String tipoProducto;
+    private String marca;
     private String modelo;
     private double precio;
     private int stock;
@@ -12,6 +14,17 @@ public class Producto {
         this.id = id;
         this.tipoProductoId = tipoProductoId;
         this.marcaId = marcaId;
+        this.modelo = modelo;
+        this.precio = precio;
+        this.stock = stock;
+    }
+
+    public Producto(int id, int tipoProductoId, int marcaId, String tipoProducto, String marca, String modelo, double precio, int stock) {
+        this.id = id;
+        this.tipoProductoId = tipoProductoId;
+        this.marcaId = marcaId;
+        this.tipoProducto = tipoProducto;
+        this.marca = marca;
         this.modelo = modelo;
         this.precio = precio;
         this.stock = stock;
@@ -39,6 +52,22 @@ public class Producto {
 
     public void setMarcaId(int marcaId) {
         this.marcaId = marcaId;
+    }
+
+    public String getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(String tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
     }
 
     public String getModelo() {

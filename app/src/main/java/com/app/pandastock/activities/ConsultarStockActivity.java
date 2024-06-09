@@ -95,12 +95,12 @@ public class ConsultarStockActivity extends AppCompatActivity {
         row.setPadding(0, 0, 0, 8); // Espacio inferior
 
         TextView tvProducto = new TextView(this);
-        tvProducto.setText(String.valueOf(producto.getTipoProductoId())); // Assuming category ID is the product name
+        tvProducto.setText(String.valueOf(producto.getTipoProducto())); // Assuming category ID is the product name
         tvProducto.setPadding(16, 16, 16, 16);
         row.addView(tvProducto);
 
         TextView tvMarca = new TextView(this);
-        tvMarca.setText(String.valueOf(producto.getMarcaId())); // Assuming brand ID is the brand name
+        tvMarca.setText(String.valueOf(producto.getMarca())); // Assuming brand ID is the brand name
         tvMarca.setPadding(16, 16, 16, 16);
         row.addView(tvMarca);
 
