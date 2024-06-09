@@ -41,4 +41,26 @@ public class DatabaseContract {
         public static final String COL_NOMBRE = "Nombre";
         public static final String COL_TIPO_PRODUCTO_ID = "IdTipoProducto";
     }
+
+    public static class VentaEntry {
+        public static final String TABLE_NAME = "Ventas";
+        public static final String COL_ID = "Id";
+        public static final String COL_NOMBRE_CLIENTE = "NombreCliente";
+        public static final String COL_APELLIDO_CLIENTE = "ApellidoCliente";
+        public static final String COL_CELULAR = "Celular";
+        public static final String COL_DNI = "Dni";
+        public static final String COL_ID_EMPLEADO = "IdEmpleado";
+        public static final String COL_MONTO_TOTAL = "MontoTotal";
+        public static final String COL_FECHA_CREACION = "FechaCreacion";
+    }
+
+    public static class DetalleVentaEntry {
+        public static final String TABLE_NAME = "DetallesVenta";
+        public static final String COL_ID = "Id";
+        public static final String COL_ID_VENTA = "IdVenta";
+        public static final String COL_ID_PRODUCTO = "IdProducto";
+        public static final String COL_CANTIDAD = "Cantidad";
+        public static final String COL_PRECIO = "Precio";
+        public static final String COL_SUBTOTAL = "SubTotal";
+    }
 }

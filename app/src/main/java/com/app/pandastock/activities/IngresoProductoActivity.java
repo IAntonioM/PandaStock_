@@ -164,8 +164,8 @@ public class IngresoProductoActivity extends AppCompatActivity {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(IngresoProductoActivity.this, MenuActivity.class));
-
+                startActivity(new Intent(IngresoProductoActivity.this, ProductosActivity.class));
+                finish();
             }
         });
     }

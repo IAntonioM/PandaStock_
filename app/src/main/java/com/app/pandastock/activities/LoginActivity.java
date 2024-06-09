@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                     Usuario user = userDao.getUserByEmail(emails);
                     // Create login session
                     session.createLoginSession(user.getId(),user.getNombres(), user.getApellidos(), user.getEmail());
-                    Intent intent=new Intent(LoginActivity.this,MenuActivity.class);
+                    Intent intent=new Intent(LoginActivity.this,MenuInicoActivity.class);
                     startActivity(intent);
                     finish();
                 } else {

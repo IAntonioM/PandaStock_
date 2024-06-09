@@ -85,7 +85,7 @@ public class SalidaProductoActivity extends AppCompatActivity {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SalidaProductoActivity.this, MenuActivity.class));
+                startActivity(new Intent(SalidaProductoActivity.this, ProductosActivity.class));
 
             }
         });

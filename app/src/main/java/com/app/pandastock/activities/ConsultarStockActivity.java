@@ -1,6 +1,9 @@
 package com.app.pandastock.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import java.util.List;
 public class ConsultarStockActivity extends AppCompatActivity {
     TableLayout tableProductos;
     ProductoDao productoDao;
+    ImageButton irMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +28,23 @@ public class ConsultarStockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_consultar_stock);
 
         tableProductos = findViewById(R.id.tableProductos);
+
+        irMenu = findViewById(R.id.btnIrMenu);
         productoDao = new ProductoDao(this);
 
         // Agregar encabezados de columna
         agregarEncabezados();
         cargarProductos();
+        irMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                        startActivity(new Intent(ConsultarStockActivity.this, MenuInicoActivity.class));
+                        finish();
+
+            }
+        });
     }
+
 
     private void agregarEncabezados() {
         TableRow row = new TableRow(this);
