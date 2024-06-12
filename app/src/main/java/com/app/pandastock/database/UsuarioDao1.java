@@ -9,10 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import com.app.pandastock.database.DatabaseContract.UsuarioEntry;
 import com.app.pandastock.models.Usuario;
 
-public class UsuarioDao {
+public class UsuarioDao1 {
     private DatabaseHelper dbHelper;
 
-    public UsuarioDao(Context context) {
+    public UsuarioDao1(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 
@@ -52,7 +52,7 @@ public class UsuarioDao {
             @SuppressLint("Range") String nombres = cursor.getString(cursor.getColumnIndex(UsuarioEntry.COL_NOMBRE));
             @SuppressLint("Range") String apellidos = cursor.getString(cursor.getColumnIndex(UsuarioEntry.COL_APELLIDO));
             @SuppressLint("Range") String userEmail = cursor.getString(cursor.getColumnIndex(UsuarioEntry.COL_EMAIL));
-            user = new Usuario(id, nombres, apellidos, userEmail);
+            //user = new Usuario(id, nombres, apellidos, userEmail);
         }
         cursor.close();
         return user;

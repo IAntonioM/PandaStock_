@@ -6,17 +6,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.pandastock.R;
-import com.app.pandastock.database.ProductoDao;
+import com.app.pandastock.firebase.ProductoDao;
 import com.app.pandastock.models.Producto;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
+import com.app.pandastock.firebase.FirestoreContract.MarcaEntry;
+import com.app.pandastock.firebase.FirestoreContract.TipoProductoEntry;
 
 public class ProductosActivity extends AppCompatActivity {
     private Spinner spinnerTipoProducto, spinnerMarca;
@@ -41,12 +44,16 @@ public class ProductosActivity extends AppCompatActivity {
         cargarProductos();
 
         // Configurar botón de retroceso
-        btnBack.setOnClickListener(v -> onBackPressed());
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductosActivity.this, MenuInicoActivity.class);
+            startActivity(intent);
+            finish();});
 
         // Configurar botón para agregar nuevo producto
         btnNuevoProducto.setOnClickListener(v -> {
             Intent intent = new Intent(ProductosActivity.this, IngresoProductoActivity.class);
             startActivity(intent);
+            finish();
         });
 
         // Configurar botón de filtro (puedes agregar más lógica aquí)
@@ -57,36 +64,64 @@ public class ProductosActivity extends AppCompatActivity {
     }
 
     private void cargarProductos() {
-        List<Producto> productos = productoDao.getAllProducts();
-        llProductList.removeAllViews();
+        productoDao.getAllProducts(new ProductoDao.FirestoreCallback<List<Producto>>() {
+            @Override
+            public void onComplete(List<Producto> productos) {
+                llProductList.removeAllViews();
 
-        for (Producto producto : productos) {
-            View cardView = getLayoutInflater().inflate(R.layout.card_producto, null);
+                if (productos != null) {
+                    for (Producto producto : productos) {
+                        View cardView = getLayoutInflater().inflate(R.layout.card_producto, null);
 
-            TextView tvTipoProducto = cardView.findViewById(R.id.tvTipoProducto);
-            TextView tvMarca = cardView.findViewById(R.id.tvMarca);
-            TextView tvModelo = cardView.findViewById(R.id.tvModelo);
-            TextView tvStock = cardView.findViewById(R.id.tvStock);
-            TextView tvPrecio = cardView.findViewById(R.id.tvPrecio);
-            Button btnEditar = cardView.findViewById(R.id.btnEditar);
-            Button btnAgregarInventario = cardView.findViewById(R.id.btnAgregarInventario);
+                        TextView tvTipoProducto = cardView.findViewById(R.id.tvTipoProducto);
+                        TextView tvMarca = cardView.findViewById(R.id.tvPrecio);
+                        TextView tvModelo = cardView.findViewById(R.id.tvModelo);
+                        TextView tvStock = cardView.findViewById(R.id.tvStock);
+                        TextView tvPrecio = cardView.findViewById(R.id.tvMarca);
+                        Button btnEditar = cardView.findViewById(R.id.btnEditar);
+                        Button btnAgregarInventario = cardView.findViewById(R.id.btnAgregarProductoVenta);
 
-            tvTipoProducto.setText(String.valueOf(producto.getTipoProducto()));
-            tvMarca.setText(String.valueOf(producto.getMarca()));
-            tvModelo.setText(producto.getModelo());
-            tvStock.setText(String.valueOf(producto.getStock()));
-            tvPrecio.setText(String.valueOf(producto.getPrecio()));
+                        producto.getTipoProductoRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    String tipoProductoNombre = documentSnapshot.getString(TipoProductoEntry.FIELD_NOMBRE);
+                                    tvTipoProducto.setText("Producto: " + tipoProductoNombre);
+                                }
+                            }
+                        });
 
-            btnEditar.setOnClickListener(v -> {
-                // Lógica para editar producto
-            });
+                        // Obtener el nombre de la marca
+                        producto.getMarcaRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    String marcaNombre = documentSnapshot.getString(MarcaEntry.FIELD_NOMBRE);
+                                    tvMarca.setText("Marca: " + marcaNombre);
+                                }
+                            }
+                        });
+                        tvModelo.setText("Modelo: "+producto.getModelo());
+                        tvStock.setText("Stock: "+String.valueOf(producto.getStock()));
+                        tvPrecio.setText("Precio: S/."+String.valueOf(producto.getPrecio()));
 
-            btnAgregarInventario.setOnClickListener(v -> {
-                // Lógica para agregar inventario
-            });
+                        btnEditar.setOnClickListener(v -> {
+                            // Lógica para editar producto
+                        });
 
-            llProductList.addView(cardView);
-        }
+                        btnAgregarInventario.setOnClickListener(v -> {
+                            Intent intent = new Intent(ProductosActivity.this, EscanearCodeBarActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+
+                        llProductList.addView(cardView);
+                  }
+                } else {
+                    // Mostrar mensaje de error o vacío
+                }
+            }
+        });
     }
-
 }
+

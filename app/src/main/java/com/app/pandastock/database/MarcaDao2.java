@@ -7,10 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import com.app.pandastock.database.DatabaseContract.MarcaEntry;
 import com.app.pandastock.database.DatabaseContract.TipoProductoEntry;
 
-public class MarcaDao {
+public class MarcaDao2 {
     private DatabaseHelper dbHelper;
 
-    public MarcaDao(Context context) {
+    public MarcaDao2(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 

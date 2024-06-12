@@ -12,14 +12,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.pandastock.R;
-import com.app.pandastock.database.ProductoDao;
+import com.app.pandastock.database.ProductoDao1;
 import com.app.pandastock.models.Producto;
 
 import java.util.List;
 
 public class ConsultarStockActivity extends AppCompatActivity {
     TableLayout tableProductos;
-    ProductoDao productoDao;
+    ProductoDao1 productoDao;
     ImageButton irMenu;
 
     @Override
@@ -30,7 +30,7 @@ public class ConsultarStockActivity extends AppCompatActivity {
         tableProductos = findViewById(R.id.tableProductos);
 
         irMenu = findViewById(R.id.btnIrMenu);
-        productoDao = new ProductoDao(this);
+        productoDao = new ProductoDao1(this);
 
         // Agregar encabezados de columna
         agregarEncabezados();
@@ -95,12 +95,12 @@ public class ConsultarStockActivity extends AppCompatActivity {
         row.setPadding(0, 0, 0, 8); // Espacio inferior
 
         TextView tvProducto = new TextView(this);
-        tvProducto.setText(String.valueOf(producto.getTipoProducto())); // Assuming category ID is the product name
+        tvProducto.setText(String.valueOf(producto.getTipoProductoRef())); // Assuming category ID is the product name
         tvProducto.setPadding(16, 16, 16, 16);
         row.addView(tvProducto);
 
         TextView tvMarca = new TextView(this);
-        tvMarca.setText(String.valueOf(producto.getMarca())); // Assuming brand ID is the brand name
+        tvMarca.setText(String.valueOf(producto.getMarcaRef())); // Assuming brand ID is the brand name
         tvMarca.setPadding(16, 16, 16, 16);
         row.addView(tvMarca);
 

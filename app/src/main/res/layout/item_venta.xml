@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:background="@color/cardview_shadow_start_color"
+    android:background="@drawable/card_background"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -13,28 +13,32 @@
         android:layout_height="wrap_content"
         android:text="Cliente"
         android:textColor="#000"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/tvPedido"
+        android:id="@+id/tvDetalles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pedido"
-        android:textColor="#000" />
+        android:text="Detalles"
+        android:textColor="#000"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tvFecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fecha"
-        android:textColor="#000" />
+        android:textColor="#000"
+        android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/tvPrecioTotal"
+        android:id="@+id/tvMontoTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Precio Total"
-        android:textColor="#000" />
+        android:text="Monto Total"
+        android:textColor="#000"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,6 +50,13 @@
             android:id="@+id/btnEditar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Editar" />
+            android:layout_marginEnd="8dp"
+            android:text="x" />
+
+        <Button
+            android:id="@+id/btnDetalles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Más Detalles" />
     </LinearLayout>
 </LinearLayout>

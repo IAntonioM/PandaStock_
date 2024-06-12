@@ -1,8 +1,6 @@
 package com.app.pandastock.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,26 +8,33 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.pandastock.R;
-import com.app.pandastock.database.DatabaseContract.TipoProductoEntry;
-import com.app.pandastock.database.DatabaseContract.MarcaEntry;
-import com.app.pandastock.database.MarcaDao;
-import com.app.pandastock.database.ProductoDao;
-import com.app.pandastock.database.TipoProductoDao;
+import com.app.pandastock.firebase.MarcaDao;
+import com.app.pandastock.firebase.ProductoDao;
+import com.app.pandastock.firebase.TipoProductoDao;
+import com.app.pandastock.models.Marca;
+import com.app.pandastock.models.TipoProducto;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class IngresoProductoActivity extends AppCompatActivity {
-    
+
     Spinner tipoProduc1, marca1;
     ProductoDao productoDao;
     TipoProductoDao tipoProductoDao;
     MarcaDao marcaDao;
     EditText cant, model, preci;
     ImageButton btn1, btn2, btn3;
+    private boolean isTipoProductosLoaded = false;
+
+    private Map<String, String> tipoProductoMap = new HashMap<>();
+    private Map<String, String> marcaMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,6 @@ public class IngresoProductoActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Registrar();
-        Seleccion();
         Regresar();
         Denegar();
         loadTipoProductos();
@@ -58,7 +62,9 @@ public class IngresoProductoActivity extends AppCompatActivity {
         tipoProduc1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                loadMarcas(); // Llama al método loadMarcas cuando se seleccione un tipo de producto
+                if (isTipoProductosLoaded) {
+                    loadMarcas();
+                }
             }
 
             @Override
@@ -67,100 +73,115 @@ public class IngresoProductoActivity extends AppCompatActivity {
             }
         });
     }
-    @SuppressLint("Range")
+
     private void loadTipoProductos() {
-        Cursor resTipProduct = tipoProductoDao.getAllTipoProductos();
-        ArrayList<String> tipProductList = new ArrayList<>();
+        tipoProductoDao.getAllTipoProductos(new TipoProductoDao.FirestoreCallback<List<TipoProducto>>() {
+            @Override
+            public void onComplete(List<TipoProducto> result) {
+                ArrayList<String> tipProductList = new ArrayList<>();
+                tipProductList.add("-- Seleccionar --"); // Agregar primer ítem
 
-        // Clear the previous data
-        tipoProduc1.setAdapter(null);
+                // Clear previous data
+                tipoProductoMap.clear();
 
-        if (resTipProduct.moveToFirst()) {
-            do {
-                tipProductList.add(resTipProduct.getString(resTipProduct.getColumnIndex(TipoProductoEntry.COL_NOMBRE)));
-            } while (resTipProduct.moveToNext());
-        }
-        resTipProduct.close(); // Make sure to close the cursor
+                if (result != null) {
+                    for (TipoProducto tipoProducto : result) {
+                        tipProductList.add(tipoProducto.getNombre());
+                        tipoProductoMap.put(tipoProducto.getNombre(), tipoProducto.getId()); // Store name and ID
+                    }
+                }
 
-        // Set the new adapter with the updated data
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tipProductList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tipoProduc1.setAdapter(adapter);
-    }
+                // Set the new adapter with the updated data
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(IngresoProductoActivity.this, android.R.layout.simple_spinner_item, tipProductList);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                tipoProduc1.setAdapter(adapter);
 
-    @SuppressLint("Range")
-    private void loadMarcas() {
-        String tipoProductoSeleccionado = tipoProduc1.getSelectedItem().toString();
-        if (tipoProductoSeleccionado == null || tipoProductoSeleccionado.isEmpty()) {
-            return; // Salir si no hay un tipo de producto seleccionado
-        }
-        Cursor resMarca = marcaDao.getMarcasByTipoProducto(tipoProductoSeleccionado);
-        ArrayList<String> marcasList = new ArrayList<>();
-        if (resMarca.moveToFirst()) {
-            do {
-                marcasList.add(resMarca.getString(resMarca.getColumnIndex(MarcaEntry.COL_NOMBRE)));
-            } while (resMarca.moveToNext());
-        }
-        resMarca.close(); // Make sure to close the cursor
-
-        // Actualizar el adaptador en el hilo principal
-        runOnUiThread(() -> {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, marcasList);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            marca1.setAdapter(adapter);
+                isTipoProductosLoaded = true;
+            }
         });
     }
-    private void Registrar(){
+
+    private void loadMarcas() {
+        String tipoProductoSeleccionado = tipoProduc1.getSelectedItem().toString();
+        if (tipoProductoSeleccionado.equals("-- Seleccionar --") || tipoProductoSeleccionado.isEmpty()) {
+            return; // Salir si no hay un tipo de producto seleccionado
+        }
+
+        marcaDao.getMarcasByTipoProducto(tipoProductoSeleccionado, new MarcaDao.FirestoreCallback<List<Marca>>() {
+            @Override
+            public void onComplete(List<Marca> result) {
+                ArrayList<String> marcasList = new ArrayList<>();
+                marcasList.add("-- Seleccionar --"); // Agregar primer ítem
+
+                // Clear previous data
+                marcaMap.clear();
+
+                if (result != null) {
+                    for (Marca marca : result) {
+                        marcasList.add(marca.getNombre());
+                        marcaMap.put(marca.getNombre(), marca.getId()); // Store name and ID
+                    }
+                }
+
+                // Actualizar el adaptador en el hilo principal
+                runOnUiThread(() -> {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(IngresoProductoActivity.this, android.R.layout.simple_spinner_item, marcasList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    marca1.setAdapter(adapter);
+                });
+            }
+        });
+    }
+
+    private void Registrar() {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                // Obtener los valores ingresados por el usuario
-                String tipoProducto = tipoProduc1.getSelectedItem().toString();
-                String marca = marca1.getSelectedItem().toString();
-                String cantidadStr = cant.getText().toString();
-                String modelo = model.getText().toString();
-                String precioStr = preci.getText().toString();
+                    // Obtener los valores ingresados por el usuario
+                    String tipoProducto = tipoProduc1.getSelectedItem().toString();
+                    String marca = marca1.getSelectedItem().toString();
+                    String cantidadStr = cant.getText().toString();
+                    String modelo = model.getText().toString();
+                    String precioStr = preci.getText().toString();
+
                     // Obtener el ID del tipo de producto y el ID de la marca seleccionados
-                int idTipoProducto = tipoProduc1.getSelectedItemPosition() + 1; // El ID del tipo de producto es la posición + 1
-                int idMarca = marca1.getSelectedItemPosition()+1;
-                Toast.makeText(IngresoProductoActivity.this, "Tipo:"+idTipoProducto+" marca:"+marca+" cantidad:"+cantidadStr+" precio:"+precioStr, Toast.LENGTH_SHORT).show();
-
-                    // Validar que se hayan ingresado todos los campos necesarios
-                if (tipoProducto.isEmpty() || marca.isEmpty() || cantidadStr.isEmpty() || modelo.isEmpty() || precioStr.isEmpty()) {
-                    Toast.makeText(IngresoProductoActivity.this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Convertir los valores de cantidad y precio a los tipos de datos necesarios
-                int cantidad = Integer.parseInt(cantidadStr);
-                double precio = Double.parseDouble(precioStr);
-                    // Aquí puedes agregar la lógica para insertar el producto en la base de datos
-                    // Supongamos que tienes un método en tu ProductoDao para insertar un producto
-                    boolean productoInsertado = productoDao.createProduct(idTipoProducto, idMarca, modelo, precio, cantidad);
-
-                    if (productoInsertado) {
-                        Toast.makeText(IngresoProductoActivity.this, "Producto registrado exitosamente", Toast.LENGTH_SHORT).show();
-                        Denegar();
-                    } else {
-                        Toast.makeText(IngresoProductoActivity.this, "Error al registrar el producto", Toast.LENGTH_SHORT).show();
+                    String idTipoProducto = tipoProductoMap.get(tipoProducto);
+                    String idMarca = marcaMap.get(marca);
+                    if (idTipoProducto == null || idMarca == null) {
+                        Toast.makeText(IngresoProductoActivity.this, "Por favor, selecciona un tipo de producto y una marca válidos", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    Toast.makeText(IngresoProductoActivity.this, "Tipo: " + idTipoProducto + " marca: " + idMarca + " cantidad: " + cantidadStr + " precio: " + precioStr, Toast.LENGTH_SHORT).show();
+                    // Validar que se hayan ingresado todos los campos necesarios
+                    if (tipoProducto.isEmpty() || marca.isEmpty() || cantidadStr.isEmpty() || modelo.isEmpty() || precioStr.isEmpty()) {
+                        Toast.makeText(IngresoProductoActivity.this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // Convertir los valores de cantidad y precio a los tipos de datos necesarios
+                    int cantidad = Integer.parseInt(cantidadStr);
+                    double precio = Double.parseDouble(precioStr);
+                    // Aquí puedes agregar la lógica para insertar el producto en la base de datos usando Firestore
+                    productoDao.createProduct(idTipoProducto, idMarca, modelo, precio, cantidad, new ProductoDao.FirestoreCallback<Boolean>() {
+                        @Override
+                        public void onComplete(Boolean result) {
+                            if (result) {
+                                Toast.makeText(IngresoProductoActivity.this, "Producto registrado exitosamente", Toast.LENGTH_SHORT).show();
+                                Denegar();
+                            } else {
+                                Toast.makeText(IngresoProductoActivity.this, "Error al registrar el producto", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(IngresoProductoActivity.this, "Error al registrar el producto en la db", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-
-
-
-    private void Seleccion(){
-
-    }
-
-    private void Regresar(){
+    private void Regresar() {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,12 +191,11 @@ public class IngresoProductoActivity extends AppCompatActivity {
         });
     }
 
-    private void Denegar(){
+    private void Denegar() {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(IngresoProductoActivity.this, "Datos eliminados.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(IngresoProductoActivity.this, "Datos eliminados.", Toast.LENGTH_SHORT).show();
                 tipoProduc1.setSelection(0);
                 marca1.setSelection(0);
                 cant.setText(" ");

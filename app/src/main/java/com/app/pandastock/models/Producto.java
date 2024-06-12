@@ -1,73 +1,53 @@
 package com.app.pandastock.models;
 
+import com.google.firebase.firestore.DocumentReference;
+
 public class Producto {
-    private int id;
-    private int tipoProductoId;
-    private int marcaId;
-    private String tipoProducto;
-    private String marca;
+    private String id;
+    private DocumentReference tipoProductoRef;
+    private DocumentReference marcaRef;
     private String modelo;
     private double precio;
     private int stock;
+    private long fechaCreacion;
+    private long fechaActualizacion;
 
-    public Producto(int id, int tipoProductoId, int marcaId, String modelo, double precio, int stock) {
+    public Producto() {
+    }
+
+    public Producto(String id, DocumentReference tipoProductoRef, DocumentReference marcaRef, String modelo, double precio, int stock, long fechaCreacion, long fechaActualizacion) {
         this.id = id;
-        this.tipoProductoId = tipoProductoId;
-        this.marcaId = marcaId;
+        this.tipoProductoRef = tipoProductoRef;
+        this.marcaRef = marcaRef;
         this.modelo = modelo;
         this.precio = precio;
         this.stock = stock;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaActualizacion = fechaActualizacion;
     }
 
-    public Producto(int id, int tipoProductoId, int marcaId, String tipoProducto, String marca, String modelo, double precio, int stock) {
-        this.id = id;
-        this.tipoProductoId = tipoProductoId;
-        this.marcaId = marcaId;
-        this.tipoProducto = tipoProducto;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.precio = precio;
-        this.stock = stock;
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getTipoProductoId() {
-        return tipoProductoId;
+    public DocumentReference getTipoProductoRef() {
+        return tipoProductoRef;
     }
 
-    public void setTipoProductoId(int tipoProductoId) {
-        this.tipoProductoId = tipoProductoId;
+    public void setTipoProductoRef(DocumentReference tipoProductoRef) {
+        this.tipoProductoRef = tipoProductoRef;
     }
 
-    public int getMarcaId() {
-        return marcaId;
+    public DocumentReference getMarcaRef() {
+        return marcaRef;
     }
 
-    public void setMarcaId(int marcaId) {
-        this.marcaId = marcaId;
-    }
-
-    public String getTipoProducto() {
-        return tipoProducto;
-    }
-
-    public void setTipoProducto(String tipoProducto) {
-        this.tipoProducto = tipoProducto;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
+    public void setMarcaRef(DocumentReference marcaRef) {
+        this.marcaRef = marcaRef;
     }
 
     public String getModelo() {
@@ -92,5 +72,21 @@ public class Producto {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public long getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(long fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public long getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(long fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
     }
 }

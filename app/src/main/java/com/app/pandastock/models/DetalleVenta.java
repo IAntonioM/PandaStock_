@@ -1,11 +1,13 @@
 package com.app.pandastock.models;
 
+import com.google.firebase.firestore.DocumentReference;
+
 public class DetalleVenta {
-    private int id;
-    private int idVenta;
-    private int idProducto;
+    private String id;
+    private DocumentReference Venta;
+    private DocumentReference Producto;
     private int cantidad;
-    private double precio;
+    private double precioUnitario;
     private double subtotal;
 
     // Constructor
@@ -13,28 +15,29 @@ public class DetalleVenta {
     }
 
     // Getters y setters
-    public int getId() {
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getIdVenta() {
-        return idVenta;
+    public DocumentReference getVenta() {
+        return Venta;
     }
 
-    public void setIdVenta(int idVenta) {
-        this.idVenta = idVenta;
+    public void setVenta(DocumentReference venta) {
+        Venta = venta;
     }
 
-    public int getIdProducto() {
-        return idProducto;
+    public DocumentReference getProducto() {
+        return Producto;
     }
 
-    public void setIdProducto(int idProducto) {
-        this.idProducto = idProducto;
+    public void setProducto(DocumentReference producto) {
+        Producto = producto;
     }
 
     public int getCantidad() {
@@ -45,12 +48,12 @@ public class DetalleVenta {
         this.cantidad = cantidad;
     }
 
-    public double getPrecio() {
-        return precio;
+    public double getPrecioUnitario() {
+        return precioUnitario;
     }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
+    public void setPrecioUnitario(double precioUnitario) {
+        this.precioUnitario = precioUnitario;
     }
 
     public double getSubtotal() {

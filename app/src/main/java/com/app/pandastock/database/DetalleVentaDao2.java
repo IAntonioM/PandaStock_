@@ -10,22 +10,22 @@ import com.app.pandastock.models.DetalleVenta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetalleVentaDao {
+public class DetalleVentaDao2 {
     private DatabaseHelper dbHelper;
 
-    public DetalleVentaDao(Context context) {
+    public DetalleVentaDao2(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 
-    public long insertDetalleVenta(DetalleVenta detalleVenta) {
+    public int insertDetalleVenta(DetalleVenta detalleVenta) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(DetalleVentaEntry.COL_ID_VENTA, detalleVenta.getIdVenta());
-        values.put(DetalleVentaEntry.COL_ID_PRODUCTO, detalleVenta.getIdProducto());
+        //values.put(DetalleVentaEntry.COL_ID_VENTA, detalleVenta.getIdVenta());
+        //values.put(DetalleVentaEntry.COL_ID_PRODUCTO, detalleVenta.getIdProducto());
         values.put(DetalleVentaEntry.COL_CANTIDAD, detalleVenta.getCantidad());
-        values.put(DetalleVentaEntry.COL_PRECIO, detalleVenta.getPrecio());
+        //values.put(DetalleVentaEntry.COL_PRECIO, detalleVenta.getPrecio());
         values.put(DetalleVentaEntry.COL_SUBTOTAL, detalleVenta.getSubtotal());
-        long id = db.insert(DetalleVentaEntry.TABLE_NAME, null, values);
+        int id = (int) db.insert(DetalleVentaEntry.TABLE_NAME, null, values);
         db.close();
         return id;
     }
@@ -38,11 +38,11 @@ public class DetalleVentaDao {
         if (cursor.moveToFirst()) {
             do {
                 DetalleVenta detalleVenta = new DetalleVenta();
-                detalleVenta.setId(cursor.getInt(cursor.getColumnIndex(DetalleVentaEntry.COL_ID)));
-                detalleVenta.setIdVenta(cursor.getInt(cursor.getColumnIndex(DetalleVentaEntry.COL_ID_VENTA)));
-                detalleVenta.setIdProducto(cursor.getInt(cursor.getColumnIndex(DetalleVentaEntry.COL_ID_PRODUCTO)));
+               // detalleVenta.setId(cursor.getInt(cursor.getColumnIndex(DetalleVentaEntry.COL_ID)));
+                //detalleVenta.setIdVenta(cursor.getInt(cursor.getColumnIndex(DetalleVentaEntry.COL_ID_VENTA)));
+                // detalleVenta.setIdProducto(cursor.getInt(cursor.getColumnIndex(DetalleVentaEntry.COL_ID_PRODUCTO)));
                 detalleVenta.setCantidad(cursor.getInt(cursor.getColumnIndex(DetalleVentaEntry.COL_CANTIDAD)));
-                detalleVenta.setPrecio(cursor.getDouble(cursor.getColumnIndex(DetalleVentaEntry.COL_PRECIO)));
+                //detalleVenta.setPrecio(cursor.getDouble(cursor.getColumnIndex(DetalleVentaEntry.COL_PRECIO)));
                 detalleVenta.setSubtotal(cursor.getDouble(cursor.getColumnIndex(DetalleVentaEntry.COL_SUBTOTAL)));
                 detallesVenta.add(detalleVenta);
             } while (cursor.moveToNext());

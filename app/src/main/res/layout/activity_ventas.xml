@@ -31,20 +31,22 @@
     </androidx.appcompat.widget.Toolbar>
 
     <!-- Title -->
+
+    <!-- Filter Form -->
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="-40dp"
+        android:layout_marginEnd="172dp"
         android:fontFamily="@font/montserratextrabold"
         android:text="Buscar Venta"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <!-- Filter Form -->
     <LinearLayout
         android:id="@+id/llFilterForm"
         android:layout_width="0dp"
@@ -60,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
-            android:hint="Nombre del Cliente"
+            android:hint="Codigo Venta"
             android:inputType="text" />
 
         <EditText
@@ -68,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
-            android:hint="Fecha del Pedido"
+            android:hint="Datos del Cliente. Ejm: Dni, Nombres, etc."
             android:inputType="date" />
 
         <Button
@@ -85,7 +87,7 @@
         app:layout_constraintTop_toBottomOf="@+id/llFilterForm"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegistrarVent1">
+        app:layout_constraintBottom_toTopOf="@+id/btnNuevaVenta">
 
         <LinearLayout
             android:id="@+id/llSalesList1"
@@ -98,11 +100,11 @@
 
     <!-- Register Sale Button -->
     <Button
-        android:id="@+id/btnRegistrarVent1"
+        android:id="@+id/btnNuevaVenta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Registrar Venta"
+        android:text="Nueva Venta"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

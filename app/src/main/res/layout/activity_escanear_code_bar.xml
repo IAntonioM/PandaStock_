@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,22 +7,95 @@
     android:background="#FFFF"
     tools:context=".activities.EscanearCodeBarActivity">
 
-    <Button
-        android:id="@+id/scan_button"
+    <!-- Producto Info -->
+    <TextView
+        android:id="@+id/txvProducto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scan Barcode"
-        android:layout_centerInParent="true"/>
+        android:text="Producto: prueba123"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
 
+    <TextView
+        android:id="@+id/txvMarca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Marca: marca1234"
+        android:layout_below="@id/txvProducto"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/txvModelo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modelo: prueba123"
+        android:layout_below="@id/txvMarca"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/txvStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stock: 6"
+        android:layout_below="@id/txvModelo"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"/>
+
+    <!-- Barcode Result -->
     <TextView
         android:id="@+id/txvBarcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/scan_button"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="135dp"
-        android:layout_marginBottom="116dp"
+        android:layout_below="@id/txvStock"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Resultado en espera ..." />
+        android:text="CodigoBar : esperando Lectura ..." />
 
+    <!-- Barcode List -->
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btnGuardarCambios"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Guardar cambios" />
+
+        <Button
+            android:id="@+id/scan_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Scaner Producto"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancelar" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="match_parent"
+        android:layout_height="236dp"
+        android:layout_below="@id/txvBarcode"
+        android:layout_marginTop="0dp"
+        android:text="Lista de Codigo de Barras:\n1283673,\n 628723,\n 723787,\n 2354324,\n 23234,\n 232333 " />
 </RelativeLayout>

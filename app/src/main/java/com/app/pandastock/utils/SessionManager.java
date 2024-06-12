@@ -21,26 +21,23 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void createLoginSession(int id, String nombres, String apellidos, String email) {
+    public void createLoginSession(String id, String nombres, String apellidos, String email) {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
-        editor.putInt(KEY_USER_ID, id);  // Corregir: almacenar el ID como entero
+        editor.putString(KEY_USER_ID, id); // Almacenar el ID como cadena de texto
         editor.putString(KEY_USER_NOMBRES, nombres);
         editor.putString(KEY_USER_APELLIDOS, apellidos);
         editor.putString(KEY_USER_EMAIL, email);
-        editor.commit();
+        editor.apply(); // Usar apply() en lugar de commit()
     }
 
-    public void logoutUser() {
-        editor.clear();
-        editor.commit();
-    }
+
 
     public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
-    public int getUserId() {
-        return pref.getInt(KEY_USER_ID, -1);  // Corregir: obtener el ID como entero
+    public String getUserId() {
+        return pref.getString(KEY_USER_ID, null); // Obtener el ID como cadena de texto
     }
 
     public String getUserNombres() {

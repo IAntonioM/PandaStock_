@@ -11,7 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.pandastock.R;
-import com.app.pandastock.database.UsuarioDao;
+import com.app.pandastock.firebase.UsuarioDao;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -32,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
         password= findViewById(R.id.txtPassword1);
         concuenta = findViewById(R.id.btnYatienescuenta);
         crearCuenta= findViewById(R.id.btnCrearcuenta);
+
         concuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,17 +60,36 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Los campos Email o Contraseña están vacíos", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                boolean isCreate = userDao.createUser(nombress, apellidoss, emails, passwords);
-                if (isCreate) {
-                    Toast.makeText(RegisterActivity.this, "Cuenta Creada Existosamente !!!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(RegisterActivity.this, "Error al Crear Cuenta", Toast.LENGTH_SHORT).show();
+
+                // Validar el formato del email
+                if (!isValidEmail(emails)) {
+                    Toast.makeText(RegisterActivity.this, "Por favor, ingresa un email válido", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
+                // Validar que la contraseña tenga al menos 6 caracteres
+                if (passwords.length() < 6) {
+                    Toast.makeText(RegisterActivity.this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                userDao.register(nombress, apellidoss, emails, passwords, new UsuarioDao.FirestoreCallback<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean isCreate) {
+                        if (isCreate) {Toast.makeText(RegisterActivity.this, "Cuenta Creada Existosamente !!!", Toast.LENGTH_LONG).show();
+                            FirebaseAuth.getInstance().signOut();
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "Error al Crear Cuenta", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
-
+    }
+    private boolean isValidEmail(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
+

@@ -38,12 +38,14 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="-40dp"
         android:fontFamily="@font/montserratextrabold"
         android:text="Registrar Venta"
         android:textColor="#000000"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="116dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <LinearLayout
         android:id="@+id/llClienteForm"
@@ -132,10 +134,10 @@
             android:id="@+id/tvMontoTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Monto Total: $0.00"
+            android:layout_marginBottom="16dp"
+            android:text="Monto Total: S/.0.00"
             android:textColor="#000000"
-            android:textSize="18sp"
-            android:layout_marginBottom="16dp"/>
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btnRegistrarVenta"

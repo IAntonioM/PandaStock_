@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.app.pandastock.database.DatabaseContract.TipoProductoEntry;
 
-public class TipoProductoDao {
+public class TipoProductoDao1 {
     private DatabaseHelper dbHelper;
 
-    public TipoProductoDao(Context context) {
+    public TipoProductoDao1(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 

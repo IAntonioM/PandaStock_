@@ -1,24 +1,28 @@
 package com.app.pandastock.models;
 
+import com.google.firebase.firestore.DocumentReference;
+
+import java.util.Date;
+
 public class Venta {
-    private int id;
+    private String id;
     private String nombreCliente;
     private String apellidoCliente;
     private String celular;
     private String dni;
-    private int idEmpleado;
+    private DocumentReference Empleado;
     private double montoTotal;
+    private Date fechaCreacion;
 
     // Constructor
     public Venta() {
     }
 
-    // Getters y setters
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -54,12 +58,12 @@ public class Venta {
         this.dni = dni;
     }
 
-    public int getIdEmpleado() {
-        return idEmpleado;
+    public DocumentReference getEmpleado() {
+        return Empleado;
     }
 
-    public void setIdEmpleado(int idEmpleado) {
-        this.idEmpleado = idEmpleado;
+    public void setEmpleado(DocumentReference empleado) {
+        Empleado = empleado;
     }
 
     public double getMontoTotal() {
@@ -68,5 +72,13 @@ public class Venta {
 
     public void setMontoTotal(double montoTotal) {
         this.montoTotal = montoTotal;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 }

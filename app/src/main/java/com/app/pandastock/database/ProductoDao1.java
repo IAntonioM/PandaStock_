@@ -12,10 +12,10 @@ import com.app.pandastock.models.Producto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductoDao {
+public class ProductoDao1 {
     private DatabaseHelper dbHelper;
 
-    public ProductoDao(Context context) {
+    public ProductoDao1(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 
@@ -28,6 +28,14 @@ public class ProductoDao {
         contentValues.put(ProductoEntry.COL_MODELO, modelo);
         contentValues.put(ProductoEntry.COL_PRECIO, precio);
         contentValues.put(ProductoEntry.COL_STOCK, stock);
+
+        // Agregar la fecha de creación
+        long currentTimeMillis = System.currentTimeMillis();
+        contentValues.put(ProductoEntry.COL_FECHA_CREACION, currentTimeMillis);
+
+        // Agregar la fecha de actualización (igual a la fecha de creación en este caso)
+        contentValues.put(ProductoEntry.COL_FECHA_ACTUALIZACION, currentTimeMillis);
+
         long result = db.insert(ProductoEntry.TABLE_NAME, null, contentValues);
         return result != -1;
     }
@@ -57,8 +65,8 @@ public class ProductoDao {
                 @SuppressLint("Range") double precio = cursor.getDouble(cursor.getColumnIndex("Precio"));
                 @SuppressLint("Range") int stock = cursor.getInt(cursor.getColumnIndex("Stock"));
 
-                Producto producto = new Producto(id, tipoProductoId, marcaId, tipoProducto, marca, modelo, precio, stock);
-                productList.add(producto);
+                //Producto producto = new Producto(id, tipoProductoId, marcaId, tipoProducto, marca, modelo, precio, stock);
+                //productList.add(producto);
             } while (cursor.moveToNext());
         }
         cursor.close();
