@@ -2,7 +2,6 @@ package com.app.pandastock.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -19,7 +18,6 @@ import com.app.pandastock.firebase.VentaDao;
 import com.app.pandastock.models.DetalleVenta;
 import com.app.pandastock.models.Venta;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.SimpleDateFormat;
@@ -36,15 +34,19 @@ public class VentasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ventas);
-
+        // Instanciar
+        ventaDao = new VentaDao();
+        detalleVentaDao = new DetalleVentaDao();
+        Button btnFiltrar = findViewById(R.id.btnBuscar1);
+        llSalesList = findViewById(R.id.llSalesList1);
         ImageButton btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> onBackPressed());
 
-        Button btnFiltrar = findViewById(R.id.btnFiltrar);
+        // Cargar las ventas
+        cargarVentas();
+
         btnFiltrar.setOnClickListener(v -> {
             // Lógica para filtrar las ventas
         });
-
         nuevaVenta = findViewById(R.id.btnNuevaVenta);
         nuevaVenta.setOnClickListener(v -> {
             Intent intent = new Intent(VentasActivity.this, RegistrarVentaActivity.class);
@@ -52,14 +54,19 @@ public class VentasActivity extends AppCompatActivity {
             finish();
         });
 
-        llSalesList = findViewById(R.id.llSalesList1);
-
-        // Instanciar el DAO de ventas
-        ventaDao = new VentaDao();
-        detalleVentaDao = new DetalleVentaDao();
-
-        // Cargar las ventas
-        cargarVentas();
+        // Salir de ventas
+        btnBack.setOnClickListener(v ->{
+            Intent intent = new Intent(VentasActivity.this, MenuInicoActivity.class);
+            startActivity(intent);
+            finish();
+        });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(VentasActivity.this, MenuInicoActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void cargarVentas() {

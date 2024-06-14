@@ -45,6 +45,7 @@ public class RegistrarVentaActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         ventasCollectionRef = db.collection(VentaEntry.COLLECTION_NAME);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_registrar_venta);
         ventaDao = new VentaDao();
         detalleVentaDao = new DetalleVentaDao();
@@ -72,6 +73,13 @@ public class RegistrarVentaActivity extends AppCompatActivity {
 
         llProductList = findViewById(R.id.llProductList);
         tvMontoTotal = findViewById(R.id.tvMontoTotal);
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, VentasActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

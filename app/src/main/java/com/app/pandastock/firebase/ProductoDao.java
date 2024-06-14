@@ -32,7 +32,8 @@ public class ProductoDao {
     }
 
     // Método para insertar un nuevo producto
-    public void createProduct(String categoriaId, String marcaId, String modelo, double precio, int stock, final FirestoreCallback<Boolean> callback) {
+    public void createProduct(String categoriaId, String marcaId, String modelo, double precio,
+                              int stock, final FirestoreCallback<Boolean> callback) {
         DocumentReference tipoProductoRef = db.collection(TipoProductoEntry.COLLECTION_NAME).document(categoriaId);
         DocumentReference marcaRef = db.collection(MarcaEntry.COLLECTION_NAME).document(marcaId);
         Map<String, Object> productData = new HashMap<>();

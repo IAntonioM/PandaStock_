@@ -1,22 +1,37 @@
 package com.app.pandastock.models;
 
-public class InventarioProducto {
-    private int id;
-    private int productoId;
-    private String codigoBarras;
+import com.google.firebase.firestore.ServerTimestamp;
 
-    public InventarioProducto(int id, int productoId, String codigoBarras) {
-        this.id = id;
-        this.productoId = productoId;
-        this.codigoBarras = codigoBarras;
+import java.util.ArrayList;
+import java.util.Date;
+
+public class InventarioProducto {
+    private String id;
+    private String codigoRegistro;
+    private int productoId;
+    private ArrayList<String> codigosBarras;
+    private @ServerTimestamp Date fechaRegistro;
+
+    public InventarioProducto() {
+        // Constructor vacío requerido por Firestore
     }
 
-    // Getters y setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public int getProductoId() { return productoId; }
-    public void setProductoId(int productoId) { this.productoId = productoId; }
-    public String getCodigoBarras() { return codigoBarras; }
-    public void setCodigoBarras(String codigoBarras) { this.codigoBarras = codigoBarras; }
+    // Constructor con parámetros, puedes ajustarlo según tus necesidades
+    public InventarioProducto(int productoId, ArrayList<String> codigosBarras, Date fechaRegistro) {
+        this.productoId = productoId;
+        this.codigosBarras = codigosBarras;
+        this.fechaRegistro = fechaRegistro;
+        // Generamos un código de registro único basado en la fecha y el productoId (ejemplo)
+        this.codigoRegistro = generarCodigoRegistro(productoId, fechaRegistro);
+    }
+
+    // Método para generar un código de registro único
+    private String generarCodigoRegistro(int productoId, Date fechaRegistro) {
+        // Aquí puedes implementar la lógica para generar el código de registro
+        // Ejemplo: concatenación de productoId y fecha formateada
+        return "Lote-" + productoId + "-" + fechaRegistro.getTime(); // Ejemplo de formato
+    }
+
 }
+
 

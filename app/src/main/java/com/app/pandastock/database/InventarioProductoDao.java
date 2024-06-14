@@ -90,8 +90,8 @@ public class InventarioProductoDao {
                 @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(InventarioProductoEntry.COL_ID));
                 @SuppressLint("Range") int productoId = cursor.getInt(cursor.getColumnIndex(InventarioProductoEntry.COL_PRODUCTO_ID));
                 @SuppressLint("Range") String codigoBarras = cursor.getString(cursor.getColumnIndex(InventarioProductoEntry.COL_CODIGO_BARRAS));
-                InventarioProducto inventarioProducto = new InventarioProducto(id, productoId, codigoBarras);
-                inventoryList.add(inventarioProducto);
+                //InventarioProducto inventarioProducto = new InventarioProducto(id, productoId, codigoBarras);
+                //inventoryList.add(inventarioProducto);
             } while (cursor.moveToNext());
         }
         cursor.close();

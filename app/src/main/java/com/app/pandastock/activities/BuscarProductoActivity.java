@@ -32,11 +32,11 @@ import java.util.Map;
 
 public class BuscarProductoActivity extends AppCompatActivity {
 
+    private Spinner tipoProduc1,marca1;
     private LinearLayout llProductList;
     private ProductoDao productoDao;
     private TipoProductoDao tipoProductoDao;
     private MarcaDao marcaDao;
-    private Spinner tipoProduc1,marca1;
     private boolean isTipoProductosLoaded = false;
 
     private Map<String, String> tipoProductoMap = new HashMap<>();
@@ -53,9 +53,9 @@ public class BuscarProductoActivity extends AppCompatActivity {
         productoDao = new ProductoDao(this);
         tipoProductoDao = new TipoProductoDao(this);
         marcaDao = new MarcaDao(this);
+        loadTipoProductos();
 
         cargarProductos();
-        loadTipoProductos();
 
         // Agrega un listener al Spinner tipoProduc1
         tipoProduc1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
