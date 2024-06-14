@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.pandastock.R;
 import com.app.pandastock.firebase.DetalleVentaDao;
+import com.app.pandastock.firebase.MovimientoInventarioDao;
 import com.app.pandastock.firebase.VentaDao;
 import com.app.pandastock.models.DetalleVenta;
 import com.app.pandastock.models.Venta;
@@ -35,7 +36,8 @@ public class RegistrarVentaActivity extends AppCompatActivity {
     private TextView tvMontoTotal;
     private VentaDao ventaDao;
     private DetalleVentaDao detalleVentaDao;
-    private SessionManager session;
+    private MovimientoInventarioDao movimientoInventarioDao;
+    private SessionManager sessionManager;
     private EditText nombresCliente, apellidosCliente, dni, celular;
     private double montoTotal = 0.0;
     private CollectionReference ventasCollectionRef;
@@ -49,11 +51,13 @@ public class RegistrarVentaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registrar_venta);
         ventaDao = new VentaDao();
         detalleVentaDao = new DetalleVentaDao();
-        session = new SessionManager(this);
+        sessionManager = new SessionManager(this);
+        movimientoInventarioDao=new MovimientoInventarioDao(this);
         nombresCliente = findViewById(R.id.etNombreCliente);
         apellidosCliente = findViewById(R.id.etApellidoCliente);
         dni = findViewById(R.id.etDniCliente);
         celular = findViewById(R.id.etCelularCliente);
+
 
         ImageButton btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> onBackPressed());
@@ -100,14 +104,21 @@ public class RegistrarVentaActivity extends AppCompatActivity {
             TextView tvModeloProducto = productItem.findViewById(R.id.tvModelo);
             TextView tvMarcaProducto = productItem.findViewById(R.id.tvMarca);
             TextView tvProductId = productItem.findViewById(R.id.tvIdProducto);
+            Button btnQuitarProducto = productItem.findViewById(R.id.btnQuitarProducto);
             tvProductId.setText(id); // Almacenar el ID del producto
 
             tvNombreProducto.setText("Producto: " + producto);
             tvModeloProducto.setText("Modelo: " + modelo);
             tvMarcaProducto.setText("Marca: " + marca);
             tvPrecioUnitario.setText("S/." + precioUnitario);
-
             configureProductSpinner(productItem, stockProducto);
+
+            // Configurar el botón Quitar Producto
+            btnQuitarProducto.setOnClickListener(v -> {
+                llProductList.removeView(productItem);
+                updateMontoTotal();
+            });
+
             llProductList.addView(productItem);
         }
     }
@@ -181,7 +192,7 @@ public class RegistrarVentaActivity extends AppCompatActivity {
     private void registrarVenta() {
         // Crear la venta
         try {
-            String isUsuario = session.getUserId();
+            String isUsuario = sessionManager.getUserId();
             Venta venta = new Venta();
             venta.setNombreCliente(nombresCliente.getText().toString());
             venta.setApellidoCliente(apellidosCliente.getText().toString());
@@ -236,6 +247,7 @@ public class RegistrarVentaActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(Boolean result) {
                         if (result) {
+                            RegistrarMovimiento(cantidad,"Salida",idProducto);
                        } else {
                             Toast.makeText(RegistrarVentaActivity.this, "Error al agregar producto " + modelotv + " a la venta", Toast.LENGTH_SHORT).show();
                         }
@@ -250,6 +262,38 @@ public class RegistrarVentaActivity extends AppCompatActivity {
         finish();
 
 
+    }
+    private void RegistrarMovimiento(int cantidad, String tipo, String idProducto) {
+        movimientoInventarioDao.createMovimientoInv(sessionManager.getUserId(), idProducto, cantidad, tipo, new MovimientoInventarioDao.FirestoreCallback<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
+                if (result) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(RegistrarVentaActivity.this, "Movimiento registrado exitosamente", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(RegistrarVentaActivity.this, "Error al registrar el movimiento", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(RegistrarVentaActivity.this, "Error al registrar el movimiento: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
 }

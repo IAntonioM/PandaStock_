@@ -79,7 +79,6 @@ public class ProductosActivity extends AppCompatActivity {
             finish();
         });
 
-        // Configurar botón de filtro (puedes agregar más lógica aquí)
         buscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,9 +87,9 @@ public class ProductosActivity extends AppCompatActivity {
                 String modeloIngresado = etModelo.getText().toString().trim();
 
                 // Validar y aplicar filtros
-                productoDao.getAllProducts(new ProductoDao.FirestoreCallback<List<Producto>>() {
+                productoDao.getAllProducts(new ProductoDao.FirestoreCallback<List<Producto>,Void>() {
                     @Override
-                    public void onComplete(List<Producto> productos) {
+                    public void onComplete(List<Producto> productos, Void aVoid) {
                         llProductList.removeAllViews();
 
                         if (productos != null) {
@@ -114,7 +113,7 @@ public class ProductosActivity extends AppCompatActivity {
                                 }
 
                                 // Mostrar el producto que pasa todos los filtros
-                                View cardView = getLayoutInflater().inflate(R.layout.card_producto, null);
+                                View cardView = getLayoutInflater().inflate(R.layout.item_producto, null);
 
                                 TextView tvTipoProducto = cardView.findViewById(R.id.tvTipoProducto);
                                 TextView tvMarca = cardView.findViewById(R.id.tvPrecio);
@@ -186,14 +185,14 @@ public class ProductosActivity extends AppCompatActivity {
     }
 
     private void cargarProductos() {
-        productoDao.getAllProducts(new ProductoDao.FirestoreCallback<List<Producto>>() {
+        productoDao.getAllProducts(new ProductoDao.FirestoreCallback<List<Producto>, Void>() {
             @Override
-            public void onComplete(List<Producto> productos) {
+            public void onComplete(List<Producto> productos, Void aVoid) {
                 llProductList.removeAllViews();
 
                 if (productos != null) {
                     for (Producto producto : productos) {
-                        View cardView = getLayoutInflater().inflate(R.layout.card_producto, null);
+                        View cardView = getLayoutInflater().inflate(R.layout.item_producto, null);
 
                         TextView tvTipoProducto = cardView.findViewById(R.id.tvTipoProducto);
                         TextView tvMarca = cardView.findViewById(R.id.tvPrecio);

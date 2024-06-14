@@ -33,7 +33,7 @@ public class ProductoDao {
 
     // Método para insertar un nuevo producto
     public void createProduct(String categoriaId, String marcaId, String modelo, double precio,
-                              int stock, final FirestoreCallback<Boolean> callback) {
+                              int stock, final FirestoreCallback<Boolean, String> callback) {
         DocumentReference tipoProductoRef = db.collection(TipoProductoEntry.COLLECTION_NAME).document(categoriaId);
         DocumentReference marcaRef = db.collection(MarcaEntry.COLLECTION_NAME).document(marcaId);
         Map<String, Object> productData = new HashMap<>();
@@ -42,6 +42,7 @@ public class ProductoDao {
         productData.put(ProductoEntry.FIELD_MODELO, modelo);
         productData.put(ProductoEntry.FIELD_PRECIO, precio);
         productData.put(ProductoEntry.FIELD_STOCK, stock);
+        productData.put(ProductoEntry.ARRAY_CODES_BAR, null);
 
         // Agregar la fecha de creación y actualización
         long currentTimeMillis = System.currentTimeMillis();
@@ -52,19 +53,19 @@ public class ProductoDao {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        callback.onComplete(true);
+                        callback.onComplete(true,documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        callback.onComplete(false);
+                        callback.onComplete(false,null);
                     }
                 });
     }
 
     // Método para obtener la lista de productos
-    public void getAllProducts(final FirestoreCallback<List<Producto>> callback) {
+    public void getAllProducts(final FirestoreCallback<List<Producto>, Void> callback) {
         productosRef.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -75,25 +76,26 @@ public class ProductoDao {
                                 String id = document.getId();
                                 String modelo = document.getString(ProductoEntry.FIELD_MODELO);
                                 double precio = document.getDouble(ProductoEntry.FIELD_PRECIO);
+                                //ArrayList<String> codigosBarra = document.getString(ProductoEntry.ARRAY_CODE_BARS);
                                 int stock = document.getLong(ProductoEntry.FIELD_STOCK).intValue();
                                 long fechaCreacion = document.getLong(ProductoEntry.FIELD_FECHA_CREACION);
                                 long fechaActualizacion = document.getLong(ProductoEntry.FIELD_FECHA_ACTUALIZACION);
 
                                 DocumentReference tipoProductoRef = document.getDocumentReference(ProductoEntry.FIELD_TIPO_PRODUCTO_REF);
                                 DocumentReference marcaRef = document.getDocumentReference(ProductoEntry.FIELD_MARCA_REF);
-                                Producto producto = new Producto(id, tipoProductoRef, marcaRef, modelo, precio, stock, fechaCreacion, fechaActualizacion);
+                                Producto producto = new Producto(id, tipoProductoRef, marcaRef, modelo, precio,null, stock, fechaCreacion, fechaActualizacion);
                                 productList.add(producto);
                             }
-                            callback.onComplete(productList);
+                            callback.onComplete(productList,null);
                         } else {
-                            callback.onComplete(null);
+                            callback.onComplete(null,null);
                         }
                     }
                 });
     }
 
     // Método para actualizar un producto
-    public void updateProduct(int id, int categoriaId, int marcaId, String modelo, double precio, int stock, final FirestoreCallback<Boolean> callback) {
+    public void updateProduct(int id, int categoriaId, int marcaId, String modelo, double precio, int stock, final FirestoreCallback<Boolean, Void> callback) {
         Map<String, Object> productData = new HashMap<>();
         //productData.put(FirestoreContract.ProductoEntry.FIELD_TIPO_PRODUCTO_ID, categoriaId);
         //productData.put(FirestoreContract.ProductoEntry.FIELD_MARCA_ID, marcaId);
@@ -111,19 +113,20 @@ public class ProductoDao {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        callback.onComplete(true);
+                        callback.onComplete(true,null);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        callback.onComplete(false);
+                        callback.onComplete(false,null);
                     }
                 });
     }
 
-    public interface FirestoreCallback<T> {
-        void onComplete(T result);
+
+    public interface FirestoreCallback<T, U> {
+        void onComplete(T result, U id);
     }
 }
 

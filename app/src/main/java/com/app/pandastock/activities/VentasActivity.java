@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +28,9 @@ import java.util.List;
 public class VentasActivity extends AppCompatActivity {
     Button nuevaVenta;
     VentaDao ventaDao;
+    EditText etCodigoVenta;
+    EditText etDatosCliente;
+    Button buscar;
     DetalleVentaDao detalleVentaDao;
     LinearLayout llSalesList;
 
@@ -38,9 +42,11 @@ public class VentasActivity extends AppCompatActivity {
         ventaDao = new VentaDao();
         detalleVentaDao = new DetalleVentaDao();
         Button btnFiltrar = findViewById(R.id.btnBuscar1);
-        llSalesList = findViewById(R.id.llSalesList1);
+        llSalesList = findViewById(R.id.llMovInvenatrioList);
         ImageButton btnBack = findViewById(R.id.btnBack);
-
+        buscar= findViewById(R.id.btnBuscar1);
+        etDatosCliente=findViewById(R.id.edtCliente);
+        etCodigoVenta=findViewById(R.id.edtCodigoVenta);
         // Cargar las ventas
         cargarVentas();
 
@@ -60,6 +66,77 @@ public class VentasActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+        buscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String datosCliente = etDatosCliente.getText().toString().trim();
+                String codigoVenta = etCodigoVenta.getText().toString().trim();
+
+                // Validar y aplicar filtros
+                ventaDao.getAllVentas(new VentaDao.FirestoreCallback<List<Venta>, Void>() {
+                    @Override
+                    public void onComplete(List<Venta> ventas, Void id) {
+                        llSalesList.removeAllViews();
+                        if (ventas != null && !ventas.isEmpty()) {
+                            for (Venta venta : ventas) {
+                                boolean matches = true;
+
+                                // Aplicar filtro por datos del cliente
+                                if (!datosCliente.isEmpty()) {
+                                    matches = matches && (
+                                            (venta.getNombreCliente() != null && venta.getNombreCliente().contains(datosCliente)) ||
+                                                    (venta.getApellidoCliente() != null && venta.getApellidoCliente().contains(datosCliente)) ||
+                                                    (venta.getCelular() != null && venta.getCelular().contains(datosCliente)) ||
+                                                    (venta.getDni() != null && venta.getDni().contains(datosCliente))
+                                    );
+                                }
+
+                                // Aplicar filtro por código de venta
+                                if (!codigoVenta.isEmpty() && (venta.getId() == null || !venta.getId().contains(codigoVenta))) {
+                                    matches = false;
+                                }
+
+                                // Mostrar el producto que pasa todos los filtros
+                                if (matches) {
+                                    View ventaItem = getLayoutInflater().inflate(R.layout.item_venta, null);
+
+                                    TextView tvCliente = ventaItem.findViewById(R.id.tvCliente);
+                                    TextView tvCVenta = ventaItem.findViewById(R.id.tvCodigoVenta);
+                                    TextView tvDetalles = ventaItem.findViewById(R.id.tvDetalles);
+                                    TextView tvFecha = ventaItem.findViewById(R.id.tvFecha);
+                                    TextView tvMontoTotal = ventaItem.findViewById(R.id.tvMontoTotal);
+                                    Button btnEditar = ventaItem.findViewById(R.id.btnEditar);
+                                    Button btnDetalles = ventaItem.findViewById(R.id.btnDetalles);
+
+                                    Date fechaCreacion = venta.getFechaCreacion();
+                                    SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); // Formato: 28/05/2022
+                                    String fechaFormateada = fechaCreacion != null ? formatoFecha.format(fechaCreacion) : "N/A";
+
+                                    tvCVenta.setText("C. Venta: "+venta.getId());
+                                    tvCliente.setText(venta.getNombreCliente() + " " + venta.getApellidoCliente());
+                                    tvDetalles.setText("Celular: " + venta.getCelular() + " | DNI: " + venta.getDni());
+                                    tvFecha.setText("Fecha: " + fechaFormateada);
+                                    tvMontoTotal.setText("Monto Total: S/ " + venta.getMontoTotal());
+
+                                    btnEditar.setOnClickListener(v -> {
+                                        // Lógica para editar la venta
+                                    });
+
+                                    btnDetalles.setOnClickListener(v -> {
+                                        mostrarDetallesVenta(venta);
+                                    });
+                                    llSalesList.addView(ventaItem);
+                                }
+                            }
+                        } else {
+                            Toast.makeText(VentasActivity.this, "No se encontraron ventas", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
+
     }
     @Override
     public void onBackPressed() {
@@ -80,6 +157,7 @@ public class VentasActivity extends AppCompatActivity {
                         View ventaItem = getLayoutInflater().inflate(R.layout.item_venta, null);
 
                             TextView tvCliente = ventaItem.findViewById(R.id.tvCliente);
+                            TextView tvCVenta = ventaItem.findViewById(R.id.tvCodigoVenta);
                             TextView tvDetalles = ventaItem.findViewById(R.id.tvDetalles);
                             TextView tvFecha = ventaItem.findViewById(R.id.tvFecha);
                             TextView tvMontoTotal = ventaItem.findViewById(R.id.tvMontoTotal);
@@ -90,6 +168,8 @@ public class VentasActivity extends AppCompatActivity {
                             Date fechaCreacion = venta.getFechaCreacion();
                             SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); // Formato: 28/05/2022
                             String fechaFormateada = formatoFecha.format(fechaCreacion);
+
+                            tvCVenta.setText("C. Venta: "+venta.getId());
                             tvCliente.setText(venta.getNombreCliente() + " " + venta.getApellidoCliente());
                             tvDetalles.setText("Celular: " + venta.getCelular() + " | DNI: " + venta.getDni());
                             tvFecha.setText("Fecha: " + fechaFormateada);
@@ -102,10 +182,8 @@ public class VentasActivity extends AppCompatActivity {
                             btnDetalles.setOnClickListener(v -> {
                                 mostrarDetallesVenta(venta);
                             });
-
                             llSalesList.addView(ventaItem);
                     }
-
                 }else{
 
                 }

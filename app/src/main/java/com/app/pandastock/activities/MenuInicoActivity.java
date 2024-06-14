@@ -20,7 +20,7 @@ public class MenuInicoActivity extends AppCompatActivity {
     Button logout;
     SessionManager session;
     TextView userInfo;
-    CardView consulta,productos,ventas,reportes;
+    CardView consulta,productos,ventas,reportes, movimientoInventario;
     FirebaseUser user;
     FirebaseAuth auth;
 
@@ -35,6 +35,7 @@ public class MenuInicoActivity extends AppCompatActivity {
         consulta = findViewById(R.id.cardConsultaR);
         productos = findViewById(R.id.cardProductos);
         ventas = findViewById(R.id.cardVentas);
+        movimientoInventario = findViewById(R.id.cardMovimientoInventario);
         reportes = findViewById(R.id.cardReporte);
         logout = findViewById(R.id.btnLogout1);
         userInfo = findViewById(R.id.txvUserInfo);
@@ -77,6 +78,12 @@ public class MenuInicoActivity extends AppCompatActivity {
                 navigateToVentas();
             }
         });
+        movimientoInventario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToMovimientoInventario();
+            }
+        });
 
         reportes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +91,7 @@ public class MenuInicoActivity extends AppCompatActivity {
                 navigateToReportesDeVentas();
             }
         });
+
     }
 
     // Funciones para navegar a las diferentes actividades
@@ -101,6 +109,11 @@ public class MenuInicoActivity extends AppCompatActivity {
 
     private void navigateToVentas() {
         Intent intent = new Intent(MenuInicoActivity.this, VentasActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    private void navigateToMovimientoInventario() {
+        Intent intent = new Intent(MenuInicoActivity.this, MovimientoInventarioActivity.class);
         startActivity(intent);
         finish();
     }

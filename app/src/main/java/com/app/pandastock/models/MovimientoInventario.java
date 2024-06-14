@@ -2,33 +2,32 @@ package com.app.pandastock.models;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.ServerTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MovimientoInventario {
 
     private String id;
-    private DocumentReference vendedor;
+    private DocumentReference usuario;
     private DocumentReference producto;
-    private DocumentReference venta;
-    private DocumentReference InventarioProducto;
+    private ArrayList<String> codigosBarra;
     private int cantidad;
     private String tipo;
-    private @ServerTimestamp Date fecha;
+    private Date fechaRegistro;
 
+    //Constructor
     public MovimientoInventario() {
-        // Constructor vacío requerido para Firestore
     }
 
-    public MovimientoInventario(String id, DocumentReference vendedor, DocumentReference producto, int cantidad, String tipo, Date fecha) {
+    public MovimientoInventario(String id, DocumentReference usuario, DocumentReference producto, ArrayList<String> codigosBarra, int cantidad, String tipo, Date fechaRegistro) {
         this.id = id;
-        this.vendedor = vendedor;
+        this.usuario = usuario;
         this.producto = producto;
+        this.codigosBarra = codigosBarra;
         this.cantidad = cantidad;
         this.tipo = tipo;
-        this.fecha = fecha;
+        this.fechaRegistro = fechaRegistro;
     }
-
-    // Getters y Setters
 
     public String getId() {
         return id;
@@ -38,12 +37,12 @@ public class MovimientoInventario {
         this.id = id;
     }
 
-    public DocumentReference getVendedor() {
-        return vendedor;
+    public DocumentReference getUsuario() {
+        return usuario;
     }
 
-    public void setVendedor(DocumentReference vendedor) {
-        this.vendedor = vendedor;
+    public void setUsuario(DocumentReference usuario) {
+        this.usuario = usuario;
     }
 
     public DocumentReference getProducto() {
@@ -52,6 +51,14 @@ public class MovimientoInventario {
 
     public void setProducto(DocumentReference producto) {
         this.producto = producto;
+    }
+
+    public ArrayList<String> getCodigosBarra() {
+        return codigosBarra;
+    }
+
+    public void setCodigosBarra(ArrayList<String> codigosBarra) {
+        this.codigosBarra = codigosBarra;
     }
 
     public int getCantidad() {
@@ -70,12 +77,12 @@ public class MovimientoInventario {
         this.tipo = tipo;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaRegistro() {
+        return fechaRegistro;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 }
 

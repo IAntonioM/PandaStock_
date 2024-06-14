@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -37,6 +38,8 @@ public class BuscarProductoActivity extends AppCompatActivity {
     private ProductoDao productoDao;
     private TipoProductoDao tipoProductoDao;
     private MarcaDao marcaDao;
+    private Button buscar;
+    private EditText etModelo;
     private boolean isTipoProductosLoaded = false;
 
     private Map<String, String> tipoProductoMap = new HashMap<>();
@@ -50,12 +53,109 @@ public class BuscarProductoActivity extends AppCompatActivity {
         ImageButton btnBack = findViewById(R.id.btnBack);
         tipoProduc1 = findViewById(R.id.spinnerTipoProducto);
         marca1 = findViewById(R.id.spinnerMarca);
+
+
+        buscar = findViewById(R.id.btnBuscar1);
+        etModelo = findViewById(R.id.etModelo);
+
+
         productoDao = new ProductoDao(this);
         tipoProductoDao = new TipoProductoDao(this);
         marcaDao = new MarcaDao(this);
         loadTipoProductos();
 
         cargarProductos();
+
+
+        // Configurar botón de filtro (puedes agregar más lógica aquí)
+        buscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tipoProductoSeleccionado = tipoProduc1.getSelectedItem().toString();
+                String marcaSeleccionada = marca1.getSelectedItem().toString();
+                String modeloIngresado = etModelo.getText().toString().trim();
+
+                // Validar y aplicar filtros
+                productoDao.getAllProducts(new ProductoDao.FirestoreCallback<List<Producto>, Void>() {
+                    @Override
+                    public void onComplete(List<Producto> productos, Void aVoid) {
+                        llProductList.removeAllViews();
+
+                        if (productos != null) {
+                            for (Producto producto : productos) {
+                                // Aplicar filtro por tipo de producto
+                                if (!tipoProductoSeleccionado.equals("-- Seleccionar --") &&
+                                        !producto.getTipoProductoRef().getId().equals(tipoProductoMap.get(tipoProductoSeleccionado))) {
+                                    continue; // Saltar producto si no coincide con el tipo seleccionado
+                                }
+
+                                // Aplicar filtro por marca
+                                if (!marcaSeleccionada.equals("-- Seleccionar --") &&
+                                        !producto.getMarcaRef().getId().equals(marcaMap.get(marcaSeleccionada))) {
+                                    continue; // Saltar producto si no coincide con la marca seleccionada
+                                }
+
+                                // Aplicar filtro por modelo
+                                if (!modeloIngresado.isEmpty() &&
+                                        !producto.getModelo().toLowerCase().contains(modeloIngresado.toLowerCase())) {
+                                    continue; // Saltar producto si no contiene el modelo ingresado
+                                }
+
+                                // Mostrar el producto que pasa todos los filtros
+                                View cardView = getLayoutInflater().inflate(R.layout.item_buscar_producto, null);
+                                TextView tvTipoProducto = cardView.findViewById(R.id.tvTipoProducto);
+                                TextView tvMarca = cardView.findViewById(R.id.tvMarca);
+                                TextView tvModelo = cardView.findViewById(R.id.tvModelo);
+                                TextView tvStock = cardView.findViewById(R.id.tvStock);
+                                TextView tvPrecio = cardView.findViewById(R.id.tvPrecio);
+                                Button btnAgregarInventario = cardView.findViewById(R.id.btnAgregarProductoVenta);
+                                final String[] tipoProductoNombre = {""};
+                                final String[] marcaNombre = {""};
+                                // Obtener el nombre del tipo de producto
+                                producto.getTipoProductoRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            tipoProductoNombre[0] = documentSnapshot.getString(FirestoreContract.TipoProductoEntry.FIELD_NOMBRE);
+                                            tvTipoProducto.setText("Producto: " + tipoProductoNombre[0]);
+                                        }
+                                    }
+                                });
+
+                                // Obtener el nombre de la marca
+                                producto.getMarcaRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            marcaNombre[0] = documentSnapshot.getString(FirestoreContract.MarcaEntry.FIELD_NOMBRE);
+                                            tvMarca.setText("Marca: " + marcaNombre[0]);
+                                        }
+                                    }
+                                });
+                                tvModelo.setText("Modelo: " + producto.getModelo());
+                                tvStock.setText("Stock: " + producto.getStock());
+                                tvPrecio.setText("Precio: S/." + producto.getPrecio());
+                                // Configurar el botón para devolver el producto seleccionado
+                                btnAgregarInventario.setOnClickListener(v -> {
+                                    Intent intent = new Intent();
+                                    intent.putExtra("id", producto.getId());
+                                    intent.putExtra("producto", tipoProductoNombre[0]);
+                                    intent.putExtra("modelo", producto.getModelo());
+                                    intent.putExtra("marca", marcaNombre[0]);
+                                    intent.putExtra("precioUnitario", producto.getPrecio());
+                                    intent.putExtra("stock", producto.getStock());
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                });
+                                llProductList.addView(cardView);
+                            }
+                        } else {
+                            // Mostrar mensaje de error o vacío
+                        }
+                    }
+                });
+            }
+        });
 
         // Agrega un listener al Spinner tipoProduc1
         tipoProduc1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -76,13 +176,13 @@ public class BuscarProductoActivity extends AppCompatActivity {
     }
 
     private void cargarProductos() {
-        productoDao.getAllProducts(new ProductoDao.FirestoreCallback<List<Producto>>() {
+        productoDao.getAllProducts(new ProductoDao.FirestoreCallback<List<Producto>, Void>() {
             @Override
-            public void onComplete(List<Producto> productos) {
+            public void onComplete(List<Producto> productos, Void aVoids) {
                 llProductList.removeAllViews();
                 if (productos != null) {
                     for (Producto producto : productos) {
-                        View cardView = getLayoutInflater().inflate(R.layout.card_buscar_producto, null);
+                        View cardView = getLayoutInflater().inflate(R.layout.item_buscar_producto, null);
                         TextView tvTipoProducto = cardView.findViewById(R.id.tvTipoProducto);
                         TextView tvMarca = cardView.findViewById(R.id.tvMarca);
                         TextView tvModelo = cardView.findViewById(R.id.tvModelo);

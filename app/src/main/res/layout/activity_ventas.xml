@@ -62,22 +62,22 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
-            android:hint="Codigo Venta"
+            android:hint="Datos del Cliente. Ejm: Dni, Nombres, etc."
             android:inputType="text" />
 
         <EditText
-            android:id="@+id/edtFecha"
+            android:id="@+id/edtCodigoVenta"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
-            android:hint="Datos del Cliente. Ejm: Dni, Nombres, etc."
-            android:inputType="date" />
+            android:hint="Codigo Venta."
+            android:inputType="text" />
 
         <Button
             android:id="@+id/btnBuscar1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Filtrar" />
+            android:text="Buscar" />
     </LinearLayout>
 
     <!-- Sales List -->
@@ -90,7 +90,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnNuevaVenta">
 
         <LinearLayout
-            android:id="@+id/llSalesList1"
+            android:id="@+id/llMovInvenatrioList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

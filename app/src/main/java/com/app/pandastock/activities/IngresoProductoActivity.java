@@ -13,10 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.pandastock.R;
 import com.app.pandastock.firebase.MarcaDao;
+import com.app.pandastock.firebase.MovimientoInventarioDao;
 import com.app.pandastock.firebase.ProductoDao;
 import com.app.pandastock.firebase.TipoProductoDao;
 import com.app.pandastock.models.Marca;
+import com.app.pandastock.models.MovimientoInventario;
 import com.app.pandastock.models.TipoProducto;
+import com.app.pandastock.utils.SessionManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +31,8 @@ public class IngresoProductoActivity extends AppCompatActivity {
     Spinner tipoProduc1, marca1;
     ProductoDao productoDao;
     TipoProductoDao tipoProductoDao;
+    MovimientoInventarioDao movimientoInventarioDao;
+    SessionManager sessionManager;
     MarcaDao marcaDao;
     EditText cant, model, preci;
     ImageButton btn1, btn2, btn3;
@@ -48,8 +53,10 @@ public class IngresoProductoActivity extends AppCompatActivity {
         btn1 = findViewById(R.id.btningresarp);
         btn2 = findViewById(R.id.btndenegar);
         btn3 = findViewById(R.id.btnregresarp);
+        sessionManager = new SessionManager(this);
         productoDao = new ProductoDao(this);
         tipoProductoDao = new TipoProductoDao(this);
+        movimientoInventarioDao = new MovimientoInventarioDao(this);
         marcaDao = new MarcaDao(this);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -162,11 +169,12 @@ public class IngresoProductoActivity extends AppCompatActivity {
                     int cantidad = Integer.parseInt(cantidadStr);
                     double precio = Double.parseDouble(precioStr);
                     // Aquí puedes agregar la lógica para insertar el producto en la base de datos usando Firestore
-                    productoDao.createProduct(idTipoProducto, idMarca, modelo, precio, cantidad, new ProductoDao.FirestoreCallback<Boolean>() {
+                    productoDao.createProduct(idTipoProducto, idMarca, modelo, precio, cantidad, new ProductoDao.FirestoreCallback<Boolean,String>() {
                         @Override
-                        public void onComplete(Boolean result) {
+                        public void onComplete(Boolean result,String idProducto) {
                             if (result) {
                                 Toast.makeText(IngresoProductoActivity.this, "Producto registrado exitosamente", Toast.LENGTH_SHORT).show();
+                                RegistrarMovimiento(cantidad,"Ingreso",idTipoProducto);
                                 Denegar();
                             } else {
                                 Toast.makeText(IngresoProductoActivity.this, "Error al registrar el producto", Toast.LENGTH_SHORT).show();
@@ -177,6 +185,38 @@ public class IngresoProductoActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Toast.makeText(IngresoProductoActivity.this, "Error al registrar el producto en la db", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+    private void RegistrarMovimiento(int cantidad, String tipo, String idProducto) {
+        movimientoInventarioDao.createMovimientoInv(sessionManager.getUserId(), idProducto, cantidad, tipo, new MovimientoInventarioDao.FirestoreCallback<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
+                if (result) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(IngresoProductoActivity.this, "Movimiento registrado exitosamente", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(IngresoProductoActivity.this, "Error al registrar el movimiento", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(IngresoProductoActivity.this, "Error al registrar el movimiento: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

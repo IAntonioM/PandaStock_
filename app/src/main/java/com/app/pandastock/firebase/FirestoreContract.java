@@ -20,29 +20,21 @@ public class FirestoreContract {
         public static final String FIELD_MARCA_REF = "marcaRef";
         public static final String FIELD_MODELO = "Modelo";
         public static final String FIELD_PRECIO = "Precio";
+        public static final String ARRAY_CODES_BAR = "CodigoBarra";
         public static final String FIELD_STOCK = "Stock";
         public static final String FIELD_FECHA_CREACION = "FechaCreacion";
         public static final String FIELD_FECHA_ACTUALIZACION = "FechaActualizacion";
-    }
-
-    // Colección InventarioProducto
-    public static class InventarioProductoEntry {
-        public static final String COLLECTION_NAME = "InventarioProducto";
-        public static final String DOC_ID = "Id";
-        public static final String FIELD_PRODUCTO_REF = "Producto";
-        public static final String FIELD_CODIGO_BARRAS = "CodigoBarras";
     }
 
     // Colección MovimientoInventario
     public static class MovimientoInventarioEntry {
         public static final String COLLECTION_NAME = "MovimientoInventario";
         public static final String DOC_ID = "Id";
+        public static final String FIELD_USUARIO_REF = "Usuario";
         public static final String FIELD_PRODUCTO_REF = "Producto";
-        public static final String FIELD_VENDEDOR_REF = "Vendedor";
+        public static final String ARRAY_CODES_BAR = "CodigoBarra";
         public static final String FIELD_CANTIDAD = "Cantidad";
         public static final String FIELD_TIPO = "Tipo";
-        public static final String FIELD_VENTA_REF = "Venta";
-        public static final String FIELD_INVENTARIO_REF = "InventarioProducto";
         public static final String FIELD_FECHA = "FechaRegistro";
     }
 

@@ -32,12 +32,6 @@
             android:name=".activities.EscanearCodeBarActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.VentasDelDiaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.SalidaProductoActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.RegisterActivity"
             android:exported="false" />
         <activity
