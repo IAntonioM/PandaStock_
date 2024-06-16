@@ -15,7 +15,6 @@ public class DetalleVenta {
     }
 
     // Getters y setters
-
     public String getId() {
         return id;
     }

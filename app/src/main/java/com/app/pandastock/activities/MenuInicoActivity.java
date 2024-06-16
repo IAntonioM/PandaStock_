@@ -119,6 +119,9 @@ public class MenuInicoActivity extends AppCompatActivity {
     }
 
     private void navigateToReportesDeVentas() {
+        Intent intent = new Intent(MenuInicoActivity.this, ReporteActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }
