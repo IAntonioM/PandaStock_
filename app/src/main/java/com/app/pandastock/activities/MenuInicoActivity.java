@@ -96,7 +96,7 @@ public class MenuInicoActivity extends AppCompatActivity {
 
     // Funciones para navegar a las diferentes actividades
     private void navigateToConsultaRapida() {
-        Intent intent = new Intent(MenuInicoActivity.this, ConsultarStockActivity.class);
+        Intent intent = new Intent(MenuInicoActivity.this, ConsultaRapidaActivity.class);
         startActivity(intent);
         finish();
     }

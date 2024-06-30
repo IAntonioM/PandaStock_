@@ -174,7 +174,7 @@ public class IngresoProductoActivity extends AppCompatActivity {
                         public void onComplete(Boolean result,String idProducto) {
                             if (result) {
                                 Toast.makeText(IngresoProductoActivity.this, "Producto registrado exitosamente", Toast.LENGTH_SHORT).show();
-                                RegistrarMovimiento(cantidad,"Ingreso",idTipoProducto);
+                                RegistrarMovimiento(cantidad,"Ingreso",idProducto);
                                 Denegar();
                             } else {
                                 Toast.makeText(IngresoProductoActivity.this, "Error al registrar el producto", Toast.LENGTH_SHORT).show();

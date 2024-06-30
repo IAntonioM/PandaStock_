@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.charts.Cartesian;
@@ -55,36 +57,38 @@ public class ReporteFragment extends Fragment {
     }
 
     private void loadChartData(int position) {
-        List<DataEntry> dataEntries = new ArrayList<>();
+        List<DataEntry> dataEntries1 = new ArrayList<>();
 
         switch (position) {
             case 0:
                 // Datos falsos para Productos Vendidos
-                dataEntries.add(new ValueDataEntry("Producto A", 100));
-                dataEntries.add(new ValueDataEntry("Producto B", 120));
-                dataEntries.add(new ValueDataEntry("Producto C", 80));
-                setupBarChart(dataEntries, "Productos Vendidos");
+                dataEntries1.add(new ValueDataEntry("Producto A", 100));
+                dataEntries1.add(new ValueDataEntry("Producto B", 120));
+                dataEntries1.add(new ValueDataEntry("Producto C", 80));
+                setupBarChart(dataEntries1, "Productos Vendidos");
                 break;
             case 1:
                 // Datos falsos para Tipo Producto Vendido
-                dataEntries.add(new ValueDataEntry("Laptop", 50));
-                dataEntries.add(new ValueDataEntry("Mouse", 75));
-                dataEntries.add(new ValueDataEntry("Monitor", 30));
-                setupPieChart(dataEntries, "Tipo Producto Vendido");
+                dataEntries1.add(new ValueDataEntry("Laptop", 50));
+                dataEntries1.add(new ValueDataEntry("Mouse", 75));
+                dataEntries1.add(new ValueDataEntry("Monitor", 30));
+                setupPieChart(dataEntries1, "Tipo Producto Vendido");
                 break;
             case 2:
+
                 // Datos falsos para Ventas x Tiempo
-                dataEntries.add(new ValueDataEntry("01/01", 200));
-                dataEntries.add(new ValueDataEntry("02/01", 150));
-                dataEntries.add(new ValueDataEntry("03/01", 180));
-                setupLineChart(dataEntries, "Ventas x Tiempo");
+                dataEntries1.add(new ValueDataEntry("01/01", 200));
+                dataEntries1.add(new ValueDataEntry("02/01", 150));
+                dataEntries1.add(new ValueDataEntry("03/01", 180));
+
+                setupLineChart(dataEntries1, "Ventas x Tiempo");
                 break;
             case 3:
                 // Datos falsos para Movimiento de Inventario
-                dataEntries.add(new CustomDataEntry("Producto A", 90, 60));
-                dataEntries.add(new CustomDataEntry("Producto B", 70, 50));
-                dataEntries.add(new CustomDataEntry("Producto C", 80, 40));
-                setupInventoryMovementChart(dataEntries, "Movimiento de Inventario");
+                dataEntries1.add(new CustomDataEntry("Producto A", 90, 60));
+                dataEntries1.add(new CustomDataEntry("Producto B", 70, 50));
+                dataEntries1.add(new CustomDataEntry("Producto C", 80, 40));
+                setupInventoryMovementChart(dataEntries1, "Movimiento de Inventario");
                 break;
         }
     }

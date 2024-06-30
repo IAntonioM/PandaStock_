@@ -169,8 +169,8 @@ public class VentasActivity extends AppCompatActivity {
                             SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); // Formato: 28/05/2022
                             String fechaFormateada = formatoFecha.format(fechaCreacion);
 
-                            tvCVenta.setText("C. Venta: "+venta.getId());
-                            tvCliente.setText(venta.getNombreCliente() + " " + venta.getApellidoCliente());
+                            tvCVenta.setText("C.Venta: "+venta.getId());
+                            tvCliente.setText("Cliente: "+venta.getNombreCliente() + " " + venta.getApellidoCliente());
                             tvDetalles.setText("Celular: " + venta.getCelular() + " | DNI: " + venta.getDni());
                             tvFecha.setText("Fecha: " + fechaFormateada);
                             tvMontoTotal.setText("Monto Total: S/ " + venta.getMontoTotal());

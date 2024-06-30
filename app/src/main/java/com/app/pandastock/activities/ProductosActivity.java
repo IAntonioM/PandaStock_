@@ -58,8 +58,8 @@ public class ProductosActivity extends AppCompatActivity {
         ImageButton btnBack = findViewById(R.id.btnBack);
         tipoProductoDao = new TipoProductoDao(this);
         marcaDao = new MarcaDao(this);
-        loadTipoProductos();
         productoDao = new ProductoDao(this);
+        loadTipoProductos();
         buscar=findViewById(R.id.btnBuscar1);
         etModelo=findViewById(R.id.etModelo);
 
