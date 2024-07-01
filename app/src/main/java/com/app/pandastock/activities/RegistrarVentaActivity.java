@@ -18,8 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.app.pandastock.R;
 import com.app.pandastock.firebase.DetalleVentaDao;
 import com.app.pandastock.firebase.MovimientoInventarioDao;
+import com.app.pandastock.firebase.ProductoDao;
 import com.app.pandastock.firebase.VentaDao;
 import com.app.pandastock.models.DetalleVenta;
+import com.app.pandastock.models.Producto;
 import com.app.pandastock.models.Venta;
 import com.app.pandastock.utils.SessionManager;
 import com.google.firebase.firestore.CollectionReference;
@@ -37,6 +39,8 @@ public class RegistrarVentaActivity extends AppCompatActivity {
     private VentaDao ventaDao;
     private DetalleVentaDao detalleVentaDao;
     private MovimientoInventarioDao movimientoInventarioDao;
+    private ProductoDao productoDao;
+    private Producto producto;
     private SessionManager sessionManager;
     private EditText nombresCliente, apellidosCliente, dni, celular;
     private double montoTotal = 0.0;
@@ -53,6 +57,7 @@ public class RegistrarVentaActivity extends AppCompatActivity {
         detalleVentaDao = new DetalleVentaDao();
         sessionManager = new SessionManager(this);
         movimientoInventarioDao=new MovimientoInventarioDao(this);
+        productoDao=new ProductoDao(this);
         nombresCliente = findViewById(R.id.etNombreCliente);
         apellidosCliente = findViewById(R.id.etApellidoCliente);
         dni = findViewById(R.id.etDniCliente);
@@ -219,21 +224,18 @@ public class RegistrarVentaActivity extends AppCompatActivity {
 
     private void registrarDetallesVenta(String idVenta) {
         try {
-
             for (int i = 0; i < llProductList.getChildCount(); i++) {
                 View productItem = llProductList.getChildAt(i);
                 TextView tvPrecioUnitario = productItem.findViewById(R.id.tvPrecioUnitario);
                 TextView tvModelo = productItem.findViewById(R.id.tvModelo);
-                String modelotv = tvModelo.getText().toString();
                 Spinner spinnerCantidad = productItem.findViewById(R.id.spinnerCantidad);
                 TextView tvSubtotal = productItem.findViewById(R.id.tvSubtotal);
                 TextView tvProductId = productItem.findViewById(R.id.tvIdProducto);
+
                 double precioUnitario = Double.parseDouble(tvPrecioUnitario.getText().toString().replace("S/.", ""));
                 int cantidad = Integer.parseInt(spinnerCantidad.getSelectedItem().toString());
                 double subtotal = Double.parseDouble(tvSubtotal.getText().toString().replace("Subtotal: S/.", ""));
                 String idProducto = tvProductId.getText().toString();
-
-                Toast.makeText(RegistrarVentaActivity.this, idProducto, Toast.LENGTH_SHORT).show();
 
                 DetalleVenta detalleVenta = new DetalleVenta();
                 DocumentReference ventaRef = ventasCollectionRef.document(idVenta);
@@ -247,24 +249,26 @@ public class RegistrarVentaActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(Boolean result) {
                         if (result) {
-                            RegistrarMovimiento(cantidad,"Salida",idProducto);
-                       } else {
-                            Toast.makeText(RegistrarVentaActivity.this, "Error al agregar producto " + modelotv + " a la venta", Toast.LENGTH_SHORT).show();
+
+                            // Actualización del stock del producto
+                            //actualizarStockProducto(idProducto, cantidad);
+                            // Registro de movimiento de salida
+                            RegistrarMovimiento(cantidad, "Salida", idProducto);
+                        } else {
+                            Toast.makeText(RegistrarVentaActivity.this, "Error al agregar producto a la venta", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
         } catch (Exception e) {
-            Toast.makeText(RegistrarVentaActivity.this, "Error al agregar los productos al dellate de venta", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegistrarVentaActivity.this, "Error al agregar los productos al detalle de venta", Toast.LENGTH_SHORT).show();
         }
         Intent intent = new Intent(this, VentasActivity.class);
         startActivity(intent);
         finish();
-
-
     }
-    private void RegistrarMovimiento(int cantidad, String tipo, String idProducto) {
-        movimientoInventarioDao.createMovimientoInv(sessionManager.getUserId(), idProducto, cantidad, tipo, new MovimientoInventarioDao.FirestoreCallback<Boolean>() {
+    private void RegistrarMovimiento(int cantidad, String tipo, String idProductoRef) {
+        movimientoInventarioDao.createMovimientoInv(sessionManager.getUserId(), idProductoRef, cantidad, tipo, new MovimientoInventarioDao.FirestoreCallback<Boolean>() {
             @Override
             public void onComplete(Boolean result) {
                 if (result) {
@@ -294,6 +298,36 @@ public class RegistrarVentaActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+    private void actualizarStockProducto(String idProducto, int cantidadVendida) {
+            int stockActual = producto.getStock();
+            int nuevoStock = stockActual - cantidadVendida;
+        Toast.makeText(this, "id. "+idProducto, Toast.LENGTH_SHORT).show();
+        
+            // Actualizar el stock del producto en Firestore
+            productoDao.updateProductStock(idProducto, nuevoStock, new ProductoDao.FirestoreCallback<Boolean, Void>() {
+                @Override
+                public void onComplete(Boolean result, Void aVoid) {
+                    if (result) {
+                        // Éxito al actualizar el stock
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(RegistrarVentaActivity.this, "Stock actualizado exitosamente", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        // Error al actualizar el stock
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(RegistrarVentaActivity.this, "Error al actualizar el stock del producto", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+
     }
 
 }

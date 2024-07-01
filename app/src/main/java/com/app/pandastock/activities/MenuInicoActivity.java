@@ -20,7 +20,7 @@ public class MenuInicoActivity extends AppCompatActivity {
     Button logout;
     SessionManager session;
     TextView userInfo;
-    CardView consulta,productos,ventas,reportes, movimientoInventario;
+    CardView productos,ventas,reportes, movimientoInventario;
     FirebaseUser user;
     FirebaseAuth auth;
 
@@ -31,8 +31,6 @@ public class MenuInicoActivity extends AppCompatActivity {
 
         session = new SessionManager(getApplicationContext());
 
-
-        consulta = findViewById(R.id.cardConsultaR);
         productos = findViewById(R.id.cardProductos);
         ventas = findViewById(R.id.cardVentas);
         movimientoInventario = findViewById(R.id.cardMovimientoInventario);
@@ -58,12 +56,7 @@ public class MenuInicoActivity extends AppCompatActivity {
             }
         });
         // Configurar listeners de clic para las tarjetas
-        consulta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToConsultaRapida();
-            }
-        });
+
 
         productos.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -95,34 +95,63 @@ public class ProductoDao {
     }
 
     // Método para actualizar un producto
-    public void updateProduct(int id, int categoriaId, int marcaId, String modelo, double precio, int stock, final FirestoreCallback<Boolean, Void> callback) {
+    public void updateProduct(String id, String categoriaId, String marcaId, String modelo, double precio, int stock, final FirestoreCallback<Boolean, Void> callback) {
+        DocumentReference tipoProductoRef = db.collection(FirestoreContract.TipoProductoEntry.COLLECTION_NAME).document(categoriaId);
+        DocumentReference marcaRef = db.collection(FirestoreContract.MarcaEntry.COLLECTION_NAME).document(marcaId);
+
         Map<String, Object> productData = new HashMap<>();
-        //productData.put(FirestoreContract.ProductoEntry.FIELD_TIPO_PRODUCTO_ID, categoriaId);
-        //productData.put(FirestoreContract.ProductoEntry.FIELD_MARCA_ID, marcaId);
+        productData.put(FirestoreContract.ProductoEntry.FIELD_TIPO_PRODUCTO_REF, tipoProductoRef);
+        productData.put(FirestoreContract.ProductoEntry.FIELD_MARCA_REF, marcaRef);
         productData.put(FirestoreContract.ProductoEntry.FIELD_MODELO, modelo);
         productData.put(FirestoreContract.ProductoEntry.FIELD_PRECIO, precio);
-        productData.put(FirestoreContract
-                .ProductoEntry.FIELD_STOCK, stock);
+        productData.put(FirestoreContract.ProductoEntry.FIELD_STOCK, stock);
 
         // Actualizar la fecha de actualización
         long currentTimeMillis = System.currentTimeMillis();
         productData.put(FirestoreContract.ProductoEntry.FIELD_FECHA_ACTUALIZACION, currentTimeMillis);
 
-        productosRef.document(String.valueOf(id))
+        productosRef.document(id)
                 .update(productData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        callback.onComplete(true,null);
+                        callback.onComplete(true, null);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        callback.onComplete(false,null);
+                        callback.onComplete(false, null);
                     }
                 });
     }
+
+    // Método para actualizar solo la cantidad del producto
+    public void updateProductStock(String id, int newStock, final FirestoreCallback<Boolean, Void> callback) {
+        Map<String, Object> productData = new HashMap<>();
+        productData.put(FirestoreContract.ProductoEntry.FIELD_STOCK, newStock);
+
+        // Actualizar la fecha de actualización
+        long currentTimeMillis = System.currentTimeMillis();
+        productData.put(FirestoreContract.ProductoEntry.FIELD_FECHA_ACTUALIZACION, currentTimeMillis);
+
+        productosRef.document(id)
+                .update(productData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        callback.onComplete(true, null);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onComplete(false, null);
+                    }
+                });
+    }
+
+
 
 
     public interface FirestoreCallback<T, U> {

@@ -8,46 +8,40 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvCodigoVenta"
+        android:id="@+id/tvTipoProducto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Codigo Venta"
+        android:text="Tipo de Producto"
         android:textColor="#000"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/tvCliente"
+        android:id="@+id/tvPrecio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cliente"
-        android:textColor="#000"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:text="Marca"
+        android:textColor="#000" />
 
     <TextView
-        android:id="@+id/tvDetalles"
+        android:id="@+id/tvModelo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Detalles"
-        android:textColor="#000"
-        android:textSize="14sp" />
+        android:text="Modelo"
+        android:textColor="#000" />
 
     <TextView
-        android:id="@+id/tvFecha"
+        android:id="@+id/tvStock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fecha"
-        android:textColor="#000"
-        android:textSize="14sp" />
+        android:text="Stock"
+        android:textColor="#000" />
 
     <TextView
-        android:id="@+id/tvMontoTotal"
+        android:id="@+id/tvMarca"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Monto Total"
-        android:textColor="#000"
-        android:textSize="14sp" />
+        android:text="Precio"
+        android:textColor="#000" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,16 +50,10 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnEditar3"
+            android:id="@+id/btnVenta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="x" />
-
-        <Button
-            android:id="@+id/btnDetalles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Más Detalles" />
+            android:layout_marginStart="8dp"
+            android:text="Agregar Inventario" />
     </LinearLayout>
 </LinearLayout>

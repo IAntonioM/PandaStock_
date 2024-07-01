@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Editar Producto"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/edtEditModelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Modelo" />
+
+    <EditText
+        android:id="@+id/edtEditPrecio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Precio"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/edtEditCantidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cantidad"
+        android:inputType="number" />
+
+    <Spinner
+        android:id="@+id/spnEditTipoProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/spnEditMarca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnEditGuardar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar" />
+
+    <Button
+        android:id="@+id/btnEditCancelar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancelar" />
+
+</LinearLayout>

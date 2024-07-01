@@ -105,7 +105,7 @@ public class VentasActivity extends AppCompatActivity {
                                     TextView tvDetalles = ventaItem.findViewById(R.id.tvDetalles);
                                     TextView tvFecha = ventaItem.findViewById(R.id.tvFecha);
                                     TextView tvMontoTotal = ventaItem.findViewById(R.id.tvMontoTotal);
-                                    Button btnEditar = ventaItem.findViewById(R.id.btnEditar);
+                                    Button btnEditar = ventaItem.findViewById(R.id.btnEditar3);
                                     Button btnDetalles = ventaItem.findViewById(R.id.btnDetalles);
 
                                     Date fechaCreacion = venta.getFechaCreacion();
@@ -161,7 +161,7 @@ public class VentasActivity extends AppCompatActivity {
                             TextView tvDetalles = ventaItem.findViewById(R.id.tvDetalles);
                             TextView tvFecha = ventaItem.findViewById(R.id.tvFecha);
                             TextView tvMontoTotal = ventaItem.findViewById(R.id.tvMontoTotal);
-                            Button btnEditar = ventaItem.findViewById(R.id.btnEditar);
+                            Button btnEditar = ventaItem.findViewById(R.id.btnEditar3);
                             Button btnDetalles = ventaItem.findViewById(R.id.btnDetalles);
 
 

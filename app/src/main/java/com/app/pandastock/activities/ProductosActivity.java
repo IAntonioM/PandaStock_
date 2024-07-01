@@ -11,16 +11,20 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.pandastock.R;
+import com.app.pandastock.adapters.EditProductDialogFragment;
 import com.app.pandastock.firebase.MarcaDao;
+import com.app.pandastock.firebase.MovimientoInventarioDao;
 import com.app.pandastock.firebase.ProductoDao;
 import com.app.pandastock.firebase.TipoProductoDao;
 import com.app.pandastock.models.Marca;
 import com.app.pandastock.models.Producto;
 import com.app.pandastock.models.TipoProducto;
+import com.app.pandastock.utils.SessionManager;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -41,6 +45,8 @@ public class ProductosActivity extends AppCompatActivity {
     private boolean isTipoProductosLoaded = false;
     private  Button buscar;
     private EditText etModelo;
+    private MovimientoInventarioDao movimientoInventarioDao;
+    private SessionManager sessionManager;
 
     private Map<String, String> tipoProductoMap = new HashMap<>();
     private Map<String, String> marcaMap = new HashMap<>();
@@ -51,6 +57,8 @@ public class ProductosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_productos);
 
         // Inicializar vistas
+        sessionManager = new SessionManager(this);
+        movimientoInventarioDao=new MovimientoInventarioDao(this);
         spinnerTipoProducto = findViewById(R.id.spinnerTipoProducto);
         spinnerMarca = findViewById(R.id.spinnerMarca);
         llProductList = findViewById(R.id.llProductList);
@@ -120,8 +128,7 @@ public class ProductosActivity extends AppCompatActivity {
                                 TextView tvModelo = cardView.findViewById(R.id.tvModelo);
                                 TextView tvStock = cardView.findViewById(R.id.tvStock);
                                 TextView tvPrecio = cardView.findViewById(R.id.tvMarca);
-                                Button btnEditar = cardView.findViewById(R.id.btnEditar);
-                                Button btnAgregarInventario = cardView.findViewById(R.id.btnAgregarProductoVenta);
+                                Button btnEditar = cardView.findViewById(R.id.btnEditar3);
 
                                 producto.getTipoProductoRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
@@ -147,20 +154,33 @@ public class ProductosActivity extends AppCompatActivity {
                                 tvStock.setText("Stock: "+String.valueOf(producto.getStock()));
                                 tvPrecio.setText("Precio: S/."+String.valueOf(producto.getPrecio()));
 
-                                btnEditar.setOnClickListener(v -> {
-                                    // Lógica para editar producto
+                                btnEditar.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        int position = llProductList.indexOfChild(cardView); // Obtener la posición del producto en la lista
+                                        Producto productoSeleccionado = productos.get(position); // Obtener el producto seleccionado
+
+                                        EditProductDialogFragment editProductDialog = new EditProductDialogFragment(
+                                                productoDao,
+                                                productoSeleccionado,
+                                                tipoProductoMap,
+                                                marcaMap,
+                                                marcaDao,
+                                                ProductosActivity.this::cargarProductos,
+                                                sessionManager,
+                                                movimientoInventarioDao // Pasar el método cargarProductos como callback
+                                        );
+
+                                        editProductDialog.show(getSupportFragmentManager(), "EditProductDialogFragment");
+                                    }
                                 });
 
-                                btnAgregarInventario.setOnClickListener(v -> {
-                                    Intent intent = new Intent(ProductosActivity.this, EscanearCodeBarActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                });
                                 llProductList.addView(cardView);
                             }
                         } else {
                             // Mostrar mensaje de error o vacío
                         }
+
                     }
                 });
             }
@@ -199,8 +219,7 @@ public class ProductosActivity extends AppCompatActivity {
                         TextView tvModelo = cardView.findViewById(R.id.tvModelo);
                         TextView tvStock = cardView.findViewById(R.id.tvStock);
                         TextView tvPrecio = cardView.findViewById(R.id.tvMarca);
-                        Button btnEditar = cardView.findViewById(R.id.btnEditar);
-                        Button btnAgregarInventario = cardView.findViewById(R.id.btnAgregarProductoVenta);
+                        Button btnEditar = cardView.findViewById(R.id.btnEditar3);
 
                         producto.getTipoProductoRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
@@ -226,15 +245,29 @@ public class ProductosActivity extends AppCompatActivity {
                         tvStock.setText("Stock: "+String.valueOf(producto.getStock()));
                         tvPrecio.setText("Precio: S/."+String.valueOf(producto.getPrecio()));
 
-                        btnEditar.setOnClickListener(v -> {
-                            // Lógica para editar producto
+
+
+                        btnEditar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                int position = llProductList.indexOfChild(cardView); // Obtener la posición del producto en la lista
+                                Producto productoSeleccionado = productos.get(position); // Obtener el producto seleccionado
+
+                                EditProductDialogFragment editProductDialog = new EditProductDialogFragment(
+                                        productoDao,
+                                        productoSeleccionado,
+                                        tipoProductoMap,
+                                        marcaMap,
+                                        marcaDao,
+                                        ProductosActivity.this::cargarProductos,
+                                        sessionManager,
+                                        movimientoInventarioDao // Pasar el método cargarProductos como callback
+                                );
+
+                                editProductDialog.show(getSupportFragmentManager(), "EditProductDialogFragment");
+                            }
                         });
 
-                        btnAgregarInventario.setOnClickListener(v -> {
-                            Intent intent = new Intent(ProductosActivity.this, EscanearCodeBarActivity.class);
-                            startActivity(intent);
-                            finish();
-                        });
 
                         llProductList.addView(cardView);
                   }
@@ -270,6 +303,8 @@ public class ProductosActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void loadMarcas() {
         String tipoProductoSeleccionado = spinnerTipoProducto.getSelectedItem().toString();
