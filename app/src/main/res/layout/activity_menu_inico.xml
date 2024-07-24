@@ -5,18 +5,22 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fond"
     tools:context=".activities.MenuInicoActivity">
 
     <LinearLayout
         android:id="@+id/topBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:layout_width="409dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardContainer"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
 
         <ImageView
             android:id="@+id/userIcon"
@@ -26,24 +30,18 @@
 
         <TextView
             android:id="@+id/txvUserInfo"
-            android:layout_width="wrap_content"
+            android:layout_width="314dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="18dp"
+            android:fontFamily="@font/montserratregular"
             android:text="Hola, Antonio"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/notificationsIcon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/notifiicon"
-            app:tint="#FFC107" />
 
     </LinearLayout>
 
@@ -55,13 +53,15 @@
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topBar">
+        app:layout_constraintTop_toBottomOf="@+id/topBar"
+        app:layout_constraintVertical_bias="1.0">
 
         <!-- Tarjeta 1: Consulta Rápida -->
 
-
         <!-- Tarjeta 2: Productos -->
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cardProductos"
             android:layout_width="match_parent"
@@ -73,6 +73,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#EDF2F9"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -92,8 +93,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:fontFamily="@font/montserratregular"
                         android:text="Productos"
-                        android:textSize="18sp" />
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
@@ -101,6 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:fontFamily="@font/montserratregular"
                     android:text="Ingresar Productos, Actualizar Productos e Inventario."
                     android:textSize="14sp" />
             </LinearLayout>
@@ -118,6 +123,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#FFE9D7"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -137,8 +143,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:fontFamily="@font/montserratregular"
                         android:text="Ventas"
-                        android:textSize="18sp" />
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
@@ -146,7 +155,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Hsitorial de Ventar, Nueva Venta."
+                    android:fontFamily="@font/montserratregular"
+                    android:text="Historial de Ventas, Nueva Venta."
                     android:textSize="14sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -163,6 +173,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#C4F2D1"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -182,8 +193,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:fontFamily="@font/montserratregular"
                         android:text="Movimiento de Inventario"
-                        android:textSize="18sp" />
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
@@ -191,6 +205,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:fontFamily="@font/montserratregular"
                     android:text="Historial de Ingreso y Salida de Productos."
                     android:textSize="14sp" />
             </LinearLayout>
@@ -208,6 +223,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#CCEBF8"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -227,8 +243,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
+                        android:fontFamily="@font/montserratregular"
                         android:text="Reportes de Ventas"
-                        android:textSize="18sp" />
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
@@ -236,21 +255,91 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Generar reporte de la Ventas Realizadas."
+                    android:fontFamily="@font/montserratregular"
+                    android:text="Generar reporte de las Ventas Realizadas."
                     android:textSize="14sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <!-- Tarjeta 6: Gestión de Personal -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardGestionPersonal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFCDD2"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iconGestionPersonal"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_gestion_personal" />
+
+                    <TextView
+                        android:id="@+id/textGestionPersonal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/montserratregular"
+                        android:text="Gestión de Personal"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/descGestionPersonal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/montserratregular"
+                    android:text="Agregar y actualizar información de empleados."
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/txvEmpresa"
+            android:layout_width="379dp"
+            android:layout_height="81dp"
+            android:fontFamily="@font/montserratregular"
+            android:foregroundGravity="center"
+            android:gravity="fill_vertical"
+            android:text="Empresa: Antonio"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:autoSizeTextType="none" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/btnLogout1"
+        style="@style/Widget.Material3.Button.Icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:background="@color/black"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#1BB273"
+        android:fontFamily="@font/montserratregular"
         android:text="Cerrar Sesión"
-        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

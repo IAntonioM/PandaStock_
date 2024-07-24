@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -128,7 +127,7 @@ public class ProductosActivity extends AppCompatActivity {
                                 TextView tvModelo = cardView.findViewById(R.id.tvModelo);
                                 TextView tvStock = cardView.findViewById(R.id.tvStock);
                                 TextView tvPrecio = cardView.findViewById(R.id.tvMarca);
-                                Button btnEditar = cardView.findViewById(R.id.btnEditar3);
+                                Button btnEditar = cardView.findViewById(R.id.btnEditar);
 
                                 producto.getTipoProductoRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
@@ -219,7 +218,7 @@ public class ProductosActivity extends AppCompatActivity {
                         TextView tvModelo = cardView.findViewById(R.id.tvModelo);
                         TextView tvStock = cardView.findViewById(R.id.tvStock);
                         TextView tvPrecio = cardView.findViewById(R.id.tvMarca);
-                        Button btnEditar = cardView.findViewById(R.id.btnEditar3);
+                        Button btnEditar = cardView.findViewById(R.id.btnEditar);
 
                         producto.getTipoProductoRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override

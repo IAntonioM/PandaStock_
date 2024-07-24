@@ -1,8 +1,11 @@
 package com.app.pandastock.firebase;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.app.pandastock.models.DetalleVenta;
+import com.app.pandastock.utils.SessionManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -19,10 +22,12 @@ public class DetalleVentaDao {
 
     private FirebaseFirestore db;
     private CollectionReference detallesVentaRef;
+    private SessionManager sessionManager;
 
-    public DetalleVentaDao() {
+    public DetalleVentaDao(Context context) {
         db = FirebaseFirestore.getInstance();
-        detallesVentaRef = db.collection(FirestoreContract.DetalleVentaEntry.COLLECTION_NAME);
+        sessionManager = new SessionManager(context);
+        detallesVentaRef = db.collection(sessionManager.getEmpresa()+"_"+FirestoreContract.DetalleVentaEntry.COLLECTION_NAME);
     }
 
     public void insertDetalleVenta(DetalleVenta detalleVenta, final FirestoreCallback<Boolean> callback) {
@@ -48,7 +53,7 @@ public class DetalleVentaDao {
                 });
     }
     public void getDetallesPorVenta(String idVenta, final FirestoreCallback<List<DetalleVenta>> callback) {
-        detallesVentaRef.whereEqualTo(FirestoreContract.DetalleVentaEntry.FIELD_VENTA_REF, db.document(FirestoreContract.VentaEntry.COLLECTION_NAME + "/" + idVenta))
+        detallesVentaRef.whereEqualTo(FirestoreContract.DetalleVentaEntry.FIELD_VENTA_REF, db.document(sessionManager.getEmpresa()+"_"+FirestoreContract.VentaEntry.COLLECTION_NAME + "/" + idVenta))
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<DetalleVenta> detallesVenta = new ArrayList<>();

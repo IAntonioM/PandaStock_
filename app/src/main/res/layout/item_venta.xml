@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
@@ -11,24 +12,27 @@
         android:id="@+id/tvCodigoVenta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Codigo Venta"
         android:textColor="#000"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvCliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Cliente"
         android:textColor="#000"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvDetalles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Detalles"
         android:textColor="#000"
         android:textSize="14sp" />
@@ -37,6 +41,7 @@
         android:id="@+id/tvFecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Fecha"
         android:textColor="#000"
         android:textSize="14sp" />
@@ -45,6 +50,7 @@
         android:id="@+id/tvMontoTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Monto Total"
         android:textColor="#000"
         android:textSize="14sp" />
@@ -55,17 +61,20 @@
         android:gravity="end"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnEditar3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="x" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/btnDetalles"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Más Detalles" />
+            android:fontFamily="@font/montserratregular"
+            android:text="Más Detalles"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:strokeColor="#06843F" />
     </LinearLayout>
 </LinearLayout>

@@ -28,7 +28,6 @@ public class Bienvenida extends AppCompatActivity {
         siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Inicie sesión", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(Bienvenida.this, LoginActivity.class));
             }
         });

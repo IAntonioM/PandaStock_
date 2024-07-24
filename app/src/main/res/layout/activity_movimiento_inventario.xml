@@ -8,17 +8,11 @@
     android:background="#FFFFFF"
     tools:context=".activities.MovimientoInventarioActivity">
 
-    <!-- Toolbar -->
-
-    <!-- Title -->
-
-    <!-- Filter Form -->
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="?attr/colorPrimary"
+        android:background="#1BB273"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Back Button -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
@@ -60,50 +53,28 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <Spinner
-            android:id="@+id/spnTipoProductoMov"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="8dp"
-            android:hint="Tipo de Producto" />
-
-        <Spinner
             android:id="@+id/spnTipoMov"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserratregular"
             android:entries="@array/Tipo_Movimiento"
-            android:hint="Tipo de Producto" />
-
-        <!-- Nuevo campo de fecha -->
-        <EditText
-            android:id="@+id/edtFecha"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="8dp"
-            android:hint="Fecha"
-            android:focusable="false"
-            android:inputType="date"
-            android:drawableEnd="@drawable/ic_calendar"/>
-
-        <EditText
-            android:id="@+id/edtUsuario"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="8dp"
-            android:hint="Buscar por Usuario"
-            android:inputType="text" />
+            android:hint="Tipo de Movimiento" />
 
         <Button
             android:id="@+id/btnBuscar1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Buscar" />
+            android:backgroundTint="#1BB273"
+            android:fontFamily="@font/montserratregular"
+            android:text="Buscar"
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Sales List -->
     <ScrollView
         android:layout_width="0dp"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/llFilterForm">
@@ -113,9 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp"></LinearLayout>
+            android:padding="8dp"/>
     </ScrollView>
-
-    <!-- Register Sale Button -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

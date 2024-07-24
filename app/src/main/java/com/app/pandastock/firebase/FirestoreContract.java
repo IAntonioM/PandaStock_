@@ -4,17 +4,16 @@ public class FirestoreContract {
 
     // Colección Usuarios
     public static class UsuarioEntry {
-        public static final String COLLECTION_NAME = "Usuarios";
+        public static final String COLLECTION_NAME = "AUsuarios";
         public static final String DOC_ID = "Id";
-        public static final String FIELD_NOMBRE = "Nombres";
-        public static final String FIELD_APELLIDO = "Apellidos";
+        public static final String FIELD_NOMBRE = "Empresa";
         public static final String FIELD_EMAIL = "Email";
         public static final String FIELD_CONTRASENA = "Contrasena";
     }
 
     // Colección Productos
     public static class ProductoEntry {
-        public static final String COLLECTION_NAME = "Productos";
+        public static final String COLLECTION_NAME = "AProductos";
         public static final String DOC_ID = "Id";
         public static final String FIELD_TIPO_PRODUCTO_REF = "tipoProductoRef";
         public static final String FIELD_MARCA_REF = "marcaRef";
@@ -28,7 +27,7 @@ public class FirestoreContract {
 
     // Colección MovimientoInventario
     public static class MovimientoInventarioEntry {
-        public static final String COLLECTION_NAME = "MovimientoInventario";
+        public static final String COLLECTION_NAME = "AMovimientoInventario";
         public static final String DOC_ID = "Id";
         public static final String FIELD_USUARIO_REF = "Usuario";
         public static final String FIELD_PRODUCTO_REF = "Producto";
@@ -55,7 +54,7 @@ public class FirestoreContract {
 
     // Colección Ventas
     public static class VentaEntry {
-        public static final String COLLECTION_NAME = "Ventas";
+        public static final String COLLECTION_NAME = "AVentas";
         public static final String DOC_ID = "Id";
         public static final String FIELD_NOMBRE_CLIENTE = "NombreCliente";
         public static final String FIELD_APELLIDO_CLIENTE = "ApellidoCliente";
@@ -68,7 +67,7 @@ public class FirestoreContract {
 
     // Subcolección DetallesVenta dentro de Ventas
     public static class DetalleVentaEntry {
-        public static final String COLLECTION_NAME = "DetallesVenta";
+        public static final String COLLECTION_NAME = "ADetallesVenta";
         public static final String DOC_ID = "Id";
         public static final String FIELD_VENTA_REF = "Venta";
         public static final String FIELD_PRODUCTO_REF = "Producto";

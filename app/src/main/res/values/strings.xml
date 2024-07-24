@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PandaStock</string>
+    <string-array name="roles_array">
+        <item>Administrador</item>
+        <item>Personal</item>
+    </string-array>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.app.pandastock.models.Producto;
+import com.app.pandastock.utils.SessionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,10 +26,13 @@ import java.util.Map;
 public class ProductoDao {
     private FirebaseFirestore db;
     private CollectionReference productosRef;
+    private SessionManager sessionManager;
 
     public ProductoDao(Context context) {
         db = FirebaseFirestore.getInstance();
-        productosRef = db.collection(FirestoreContract.ProductoEntry.COLLECTION_NAME);
+        sessionManager = new SessionManager(context);
+        productosRef = db.collection(sessionManager.getEmpresa()+"_"+FirestoreContract.ProductoEntry.COLLECTION_NAME);
+
     }
 
     // Método para insertar un nuevo producto

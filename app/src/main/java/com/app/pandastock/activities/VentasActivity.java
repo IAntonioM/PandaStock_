@@ -39,8 +39,8 @@ public class VentasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ventas);
         // Instanciar
-        ventaDao = new VentaDao();
-        detalleVentaDao = new DetalleVentaDao();
+        ventaDao = new VentaDao(this);
+        detalleVentaDao = new DetalleVentaDao(this);
         Button btnFiltrar = findViewById(R.id.btnBuscar1);
         llSalesList = findViewById(R.id.llMovInvenatrioList);
         ImageButton btnBack = findViewById(R.id.btnBack);
@@ -105,7 +105,6 @@ public class VentasActivity extends AppCompatActivity {
                                     TextView tvDetalles = ventaItem.findViewById(R.id.tvDetalles);
                                     TextView tvFecha = ventaItem.findViewById(R.id.tvFecha);
                                     TextView tvMontoTotal = ventaItem.findViewById(R.id.tvMontoTotal);
-                                    Button btnEditar = ventaItem.findViewById(R.id.btnEditar3);
                                     Button btnDetalles = ventaItem.findViewById(R.id.btnDetalles);
 
                                     Date fechaCreacion = venta.getFechaCreacion();
@@ -118,9 +117,6 @@ public class VentasActivity extends AppCompatActivity {
                                     tvFecha.setText("Fecha: " + fechaFormateada);
                                     tvMontoTotal.setText("Monto Total: S/ " + venta.getMontoTotal());
 
-                                    btnEditar.setOnClickListener(v -> {
-                                        // Lógica para editar la venta
-                                    });
 
                                     btnDetalles.setOnClickListener(v -> {
                                         mostrarDetallesVenta(venta);
@@ -156,33 +152,28 @@ public class VentasActivity extends AppCompatActivity {
                     for (Venta venta : ventas) {
                         View ventaItem = getLayoutInflater().inflate(R.layout.item_venta, null);
 
-                            TextView tvCliente = ventaItem.findViewById(R.id.tvCliente);
-                            TextView tvCVenta = ventaItem.findViewById(R.id.tvCodigoVenta);
-                            TextView tvDetalles = ventaItem.findViewById(R.id.tvDetalles);
-                            TextView tvFecha = ventaItem.findViewById(R.id.tvFecha);
-                            TextView tvMontoTotal = ventaItem.findViewById(R.id.tvMontoTotal);
-                            Button btnEditar = ventaItem.findViewById(R.id.btnEditar3);
-                            Button btnDetalles = ventaItem.findViewById(R.id.btnDetalles);
+                        TextView tvCliente = ventaItem.findViewById(R.id.tvCliente);
+                        TextView tvCVenta = ventaItem.findViewById(R.id.tvCodigoVenta);
+                        TextView tvDetalles = ventaItem.findViewById(R.id.tvDetalles);
+                        TextView tvFecha = ventaItem.findViewById(R.id.tvFecha);
+                        TextView tvMontoTotal = ventaItem.findViewById(R.id.tvMontoTotal);
+                        Button btnDetalles = ventaItem.findViewById(R.id.btnDetalles);
 
 
-                            Date fechaCreacion = venta.getFechaCreacion();
-                            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); // Formato: 28/05/2022
-                            String fechaFormateada = formatoFecha.format(fechaCreacion);
+                        Date fechaCreacion = venta.getFechaCreacion();
+                        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); // Formato: 28/05/2022
+                        String fechaFormateada = formatoFecha.format(fechaCreacion);
 
-                            tvCVenta.setText("C.Venta: "+venta.getId());
-                            tvCliente.setText("Cliente: "+venta.getNombreCliente() + " " + venta.getApellidoCliente());
-                            tvDetalles.setText("Celular: " + venta.getCelular() + " | DNI: " + venta.getDni());
-                            tvFecha.setText("Fecha: " + fechaFormateada);
-                            tvMontoTotal.setText("Monto Total: S/ " + venta.getMontoTotal());
+                        tvCVenta.setText("C.Venta: "+venta.getId());
+                        tvCliente.setText("Cliente: "+venta.getNombreCliente() + " " + venta.getApellidoCliente());
+                        tvDetalles.setText("Celular: " + venta.getCelular() + " | DNI: " + venta.getDni());
+                        tvFecha.setText("Fecha: " + fechaFormateada);
+                        tvMontoTotal.setText("Monto Total: S/ " + venta.getMontoTotal());
 
-                            btnEditar.setOnClickListener(v -> {
-                                // Lógica para editar la venta
-                            });
-
-                            btnDetalles.setOnClickListener(v -> {
-                                mostrarDetallesVenta(venta);
-                            });
-                            llSalesList.addView(ventaItem);
+                        btnDetalles.setOnClickListener(v -> {
+                            mostrarDetallesVenta(venta);
+                        });
+                        llSalesList.addView(ventaItem);
                     }
                 }else{
 
@@ -214,8 +205,8 @@ public class VentasActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
-                                String nombre = documentSnapshot.getString(FirestoreContract.UsuarioEntry.FIELD_NOMBRE);
-                                String apellido = documentSnapshot.getString(FirestoreContract.UsuarioEntry.FIELD_APELLIDO);
+                                String nombre = documentSnapshot.getString("fullName");
+                                String apellido = documentSnapshot.getString("lastName");
                                 tvVendedor.setText("Vendedor: " + nombre + " " + apellido);
                             }
                         }
@@ -228,6 +219,7 @@ public class VentasActivity extends AppCompatActivity {
                     Button btnCerrar = dialogView.findViewById(R.id.btnCerrar);
 
                     for (DetalleVenta detalle : detallesVenta) {
+                        Toast.makeText(VentasActivity.this, "producto sss", Toast.LENGTH_SHORT).show();
                         View detalleItem = getLayoutInflater().inflate(R.layout.item_detalle_venta, null);
 
                         TextView tvProducto = detalleItem.findViewById(R.id.tvProducto);

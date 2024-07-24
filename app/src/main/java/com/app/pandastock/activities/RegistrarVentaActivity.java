@@ -53,8 +53,8 @@ public class RegistrarVentaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_registrar_venta);
-        ventaDao = new VentaDao();
-        detalleVentaDao = new DetalleVentaDao();
+        ventaDao = new VentaDao(this);
+        detalleVentaDao = new DetalleVentaDao(this);
         sessionManager = new SessionManager(this);
         movimientoInventarioDao=new MovimientoInventarioDao(this);
         productoDao=new ProductoDao(this);
@@ -130,7 +130,7 @@ public class RegistrarVentaActivity extends AppCompatActivity {
 
     private void configureProductSpinner(View productItem, int stockProducto) {
         Spinner spinnerCantidad = productItem.findViewById(R.id.spinnerCantidad);
-        int maxCantidad = Math.min(stockProducto, 10); // Determinar el valor máximo entre el stock del producto y 10
+        int maxCantidad = Math.min(stockProducto, stockProducto); // Determinar el valor máximo entre el stock del producto y 10
         Integer[] cantidades = new Integer[maxCantidad];
         for (int i = 1; i <= maxCantidad; i++) {
             cantidades[i - 1] = i;
@@ -203,26 +203,27 @@ public class RegistrarVentaActivity extends AppCompatActivity {
             venta.setApellidoCliente(apellidosCliente.getText().toString());
             venta.setCelular(celular.getText().toString());
             venta.setDni(dni.getText().toString());
-            venta.setEmpleado(FirebaseFirestore.getInstance().document(UsuarioEntry.COLLECTION_NAME + "/" + isUsuario));
+            venta.setEmpleado(FirebaseFirestore.getInstance().document(sessionManager.getEmpresa()+"_persons/" + isUsuario));
             venta.setMontoTotal(montoTotal);
             venta.setFechaCreacion(new Date());
-            ventaDao.insertVenta(venta, new VentaDao.FirestoreCallback<Boolean, String>() {
-                @Override
-                public void onComplete(Boolean result, String idVenta) {
-                    if (result) {
-                        //Toast.makeText(RegistrarVentaActivity.this, "Venta Registrada Exitosamente", Toast.LENGTH_SHORT).show();
-                        registrarDetallesVenta(idVenta);
-                    } else {
-                        Toast.makeText(RegistrarVentaActivity.this, "Error al registrar la venta", Toast.LENGTH_SHORT).show();
+                ventaDao.insertVenta(venta, new VentaDao.FirestoreCallback<Boolean, String>() {
+                    @Override
+                    public void onComplete(Boolean result, String idVenta) {
+                        if (result) {
+                            //Toast.makeText(RegistrarVentaActivity.this, "Venta Registrada Exitosamente", Toast.LENGTH_SHORT).show();
+                            registrarDetallesVenta(idVenta);
+                        } else {
+                            Toast.makeText(RegistrarVentaActivity.this, "Error al registrar la venta", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
+                });
         } catch (Exception e) {
             Toast.makeText(this, "Error al registrar la venta", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void registrarDetallesVenta(String idVenta) {
+        Toast.makeText(this, "id: "+idVenta, Toast.LENGTH_SHORT).show();
         try {
             for (int i = 0; i < llProductList.getChildCount(); i++) {
                 View productItem = llProductList.getChildAt(i);
@@ -239,8 +240,8 @@ public class RegistrarVentaActivity extends AppCompatActivity {
 
                 DetalleVenta detalleVenta = new DetalleVenta();
                 DocumentReference ventaRef = ventasCollectionRef.document(idVenta);
-                detalleVenta.setVenta(ventaRef);
-                detalleVenta.setProducto(FirebaseFirestore.getInstance().document(ProductoEntry.COLLECTION_NAME + "/" + idProducto));
+                detalleVenta.setVenta(FirebaseFirestore.getInstance().document(sessionManager.getEmpresa()+"_"+VentaEntry.COLLECTION_NAME + "/" + idVenta));
+                detalleVenta.setProducto(FirebaseFirestore.getInstance().document(sessionManager.getEmpresa()+"_"+ProductoEntry.COLLECTION_NAME + "/" + idProducto));
                 detalleVenta.setCantidad(cantidad);
                 detalleVenta.setPrecioUnitario(precioUnitario);
                 detalleVenta.setSubtotal(subtotal);
@@ -249,10 +250,11 @@ public class RegistrarVentaActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(Boolean result) {
                         if (result) {
-
+                            int stockActual= spinnerCantidad.getAdapter().getCount();
                             // Actualización del stock del producto
                             //actualizarStockProducto(idProducto, cantidad);
                             // Registro de movimiento de salida
+                            actualizarStockProducto(idProducto,cantidad,stockActual);
                             RegistrarMovimiento(cantidad, "Salida", idProducto);
                         } else {
                             Toast.makeText(RegistrarVentaActivity.this, "Error al agregar producto a la venta", Toast.LENGTH_SHORT).show();
@@ -299,10 +301,9 @@ public class RegistrarVentaActivity extends AppCompatActivity {
             }
         });
     }
-    private void actualizarStockProducto(String idProducto, int cantidadVendida) {
-            int stockActual = producto.getStock();
+    private void actualizarStockProducto(String idProducto, int cantidadVendida,int stockActual) {
+        Toast.makeText(this, "stock "+stockActual, Toast.LENGTH_SHORT).show();
             int nuevoStock = stockActual - cantidadVendida;
-        Toast.makeText(this, "id. "+idProducto, Toast.LENGTH_SHORT).show();
         
             // Actualizar el stock del producto en Firestore
             productoDao.updateProductStock(idProducto, nuevoStock, new ProductoDao.FirestoreCallback<Boolean, Void>() {

@@ -11,6 +11,7 @@
         android:id="@+id/tvTipoProducto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Tipo de Producto"
         android:textColor="#000"
         android:textStyle="bold" />
@@ -19,6 +20,7 @@
         android:id="@+id/tvPrecio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Marca"
         android:textColor="#000" />
 
@@ -26,6 +28,7 @@
         android:id="@+id/tvModelo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Modelo"
         android:textColor="#000" />
 
@@ -33,6 +36,7 @@
         android:id="@+id/tvStock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Stock"
         android:textColor="#000" />
 
@@ -40,6 +44,7 @@
         android:id="@+id/tvMarca"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserratregular"
         android:text="Precio"
         android:textColor="#000" />
 
@@ -54,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:fontFamily="@font/montserratregular"
             android:text="Agregar Inventario" />
     </LinearLayout>
 </LinearLayout>

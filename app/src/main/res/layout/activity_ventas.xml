@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="?attr/colorPrimary"
+        android:background="#1BB273"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,8 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/icon_arrow"
-            android:contentDescription="Back" />
+            android:contentDescription="Back"
+            android:src="@drawable/icon_arrow" />
     </androidx.appcompat.widget.Toolbar>
 
     <!-- Title -->
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-40dp"
-        android:layout_marginEnd="172dp"
+        android:layout_marginEnd="140dp"
         android:fontFamily="@font/montserratextrabold"
         android:text="Buscar Venta"
         android:textColor="#000000"
@@ -62,22 +62,29 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserratregular"
             android:hint="Datos del Cliente. Ejm: Dni, Nombres, etc."
-            android:inputType="text" />
+            android:inputType="text"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/edtCodigoVenta"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
+            android:fontFamily="@font/montserratregular"
             android:hint="Codigo Venta."
-            android:inputType="text" />
+            android:inputType="text"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/btnBuscar1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Buscar" />
+            android:backgroundTint="#1BB273"
+            android:fontFamily="@font/montserratregular"
+            android:text="Buscar"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <!-- Sales List -->
@@ -104,7 +111,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#1BB273"
+        android:fontFamily="@font/montserratregular"
         android:text="Nueva Venta"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

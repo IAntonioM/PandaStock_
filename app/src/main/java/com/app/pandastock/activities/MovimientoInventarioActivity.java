@@ -38,8 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MovimientoInventarioActivity extends AppCompatActivity {
-    private Spinner tipoMovimiento,tipoProducto;
-    private EditText usuarioMov;
+    private Spinner tipoMovimiento;
     private Button buscar;
     private ImageButton btnback;
     private LinearLayout llMovInvenatrioList;
@@ -56,8 +55,6 @@ public class MovimientoInventarioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movimiento_inventario);
 
         tipoMovimiento=findViewById(R.id.spnTipoMov);
-        tipoProducto=findViewById(R.id.spnTipoProductoMov);
-        usuarioMov=findViewById(R.id.edtUsuario);
         buscar=findViewById(R.id.btnBuscar1);
         llMovInvenatrioList=findViewById(R.id.llMovInvenatrioList);
         btnback=findViewById(R.id.btnBack);
@@ -78,33 +75,10 @@ public class MovimientoInventarioActivity extends AppCompatActivity {
             finish();
         });
 
-        EditText etFechaMov = findViewById(R.id.edtFecha);
-        etFechaMov.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(MovimientoInventarioActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                etFechaMov.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                            }
-                        }, year, month, day);
-                datePickerDialog.show();
-            }
-        });
-
         buscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String tipoProductoSeleccionado = tipoProducto.getSelectedItem().toString();
                 String tipoMovimientoSeleccionado = tipoMovimiento.getSelectedItem().toString();
-                String usuarioSeleccionado = usuarioMov.getText().toString().trim();
-                String fechaSeleccionada = etFechaMov.getText().toString().trim();
 
                 movimientoInventarioDao.getAllMovimientoInv(new MovimientoInventarioDao.FirestoreCallback<List<MovimientoInventario>>() {
                     @Override
@@ -116,21 +90,11 @@ public class MovimientoInventarioActivity extends AppCompatActivity {
                                 // Aplicar filtros
                                 boolean pasaFiltros = true;
 
-                                if (!tipoProductoSeleccionado.equals("-- Seleccionar --") && !movimientoInventario.getProducto().equals(tipoProductoMap.get(tipoProductoSeleccionado))) {
-                                    pasaFiltros = false;
-                                }
 
                                 if (!tipoMovimientoSeleccionado.equals("-- Seleccionar --") && !movimientoInventario.getTipo().equals(tipoMovimientoSeleccionado)) {
                                     pasaFiltros = false;
                                 }
 
-                                if (!usuarioSeleccionado.isEmpty() && !(movimientoInventario.getUsuario().equals(usuarioSeleccionado))) {
-                                    pasaFiltros = false;
-                                }
-
-                                if (!fechaSeleccionada.isEmpty() && !(new SimpleDateFormat("dd/MM/yyyy").format(movimientoInventario.getFechaRegistro()).contains(fechaSeleccionada))) {
-                                    pasaFiltros = false;
-                                }
 
                                 if (pasaFiltros) {
                                     // Mostrar el movimiento que pasa todos los filtros
@@ -159,7 +123,7 @@ public class MovimientoInventarioActivity extends AppCompatActivity {
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             if (documentSnapshot.exists()) {
                                                 String nombres = documentSnapshot.getString(FirestoreContract.UsuarioEntry.FIELD_NOMBRE);
-                                                String apellidos = documentSnapshot.getString(FirestoreContract.UsuarioEntry.FIELD_APELLIDO);
+                                                String apellidos = documentSnapshot.getString(FirestoreContract.UsuarioEntry.FIELD_NOMBRE);
                                                 usuarioMov.setText("Usuario: " + nombres + " " + apellidos);
                                             }
                                         }
@@ -212,7 +176,7 @@ public class MovimientoInventarioActivity extends AppCompatActivity {
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(MovimientoInventarioActivity.this, android.R.layout.simple_spinner_item, tipProductList);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                tipoProducto.setAdapter(adapter);
+
             }
         });
     }
@@ -234,7 +198,6 @@ public class MovimientoInventarioActivity extends AppCompatActivity {
                         TextView cantidadMov = cardView.findViewById(R.id.tvCantidadMov);
                         TextView tipoMov = cardView.findViewById(R.id.tvTipoMov);
                         TextView fechaMov = cardView.findViewById(R.id.tvFechaMov);
-                        Toast.makeText(MovimientoInventarioActivity.this, "as:"+movimientoInventario.getProducto(), Toast.LENGTH_SHORT).show();
 
                         // Obtener información del producto
                         movimientoInventario.getProducto().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -251,8 +214,8 @@ public class MovimientoInventarioActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 if (documentSnapshot.exists()) {
-                                    String nombres = documentSnapshot.getString(FirestoreContract.UsuarioEntry.FIELD_NOMBRE);
-                                    String apellidos = documentSnapshot.getString(FirestoreContract.UsuarioEntry.FIELD_APELLIDO);
+                                    String nombres = documentSnapshot.getString("fullName");
+                                    String apellidos = documentSnapshot.getString("lastName");
                                     usuarioMov.setText("Usuario: " + nombres + " " + apellidos);
                                 }
                             }

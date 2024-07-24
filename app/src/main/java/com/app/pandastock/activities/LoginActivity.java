@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.pandastock.R;
 import com.app.pandastock.firebase.UsuarioDao;
-import com.app.pandastock.models.Usuario;
 import com.app.pandastock.utils.SessionManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,23 +23,26 @@ public class LoginActivity extends AppCompatActivity {
     Button crear, ingresar;
     EditText email, password;
     FirebaseAuth mAuth;
+
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             Toast.makeText(this, currentUser.getEmail(), Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(LoginActivity.this, MenuInicoActivity.class));
+            startActivity(new Intent(LoginActivity.this, MenuSelectUserActivity.class));
+            finish();
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         userDao = new UsuarioDao(this);
         session = new SessionManager(this);
-        mAuth= FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         email = findViewById(R.id.txtEmail);
         password = findViewById(R.id.txtPassword);
         crear = findViewById(R.id.btnCrearCuentaa);
@@ -71,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (isSuccessful) {
                             Toast.makeText(LoginActivity.this, "Inicio de Sesión Exitoso !!!", Toast.LENGTH_SHORT).show();
                             // Aquí puedes agregar la lógica adicional si es necesario
-                            Intent intent = new Intent(LoginActivity.this, MenuInicoActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MenuSelectUserActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
@@ -81,9 +83,5 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
 }
-
-
-

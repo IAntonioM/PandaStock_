@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.app.pandastock.models.MovimientoInventario;
+import com.app.pandastock.utils.SessionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,16 +29,18 @@ import java.util.Map;
 public class MovimientoInventarioDao {
     private FirebaseFirestore db;
     private CollectionReference movimientoInventarioRef;
+    private SessionManager sessionManager;
 
     public MovimientoInventarioDao(Context context) {
         db = FirebaseFirestore.getInstance();
-        movimientoInventarioRef = db.collection(MovimientoInventarioEntry.COLLECTION_NAME);
+        sessionManager = new SessionManager(context);
+        movimientoInventarioRef = db.collection(sessionManager.getEmpresa()+"_"+MovimientoInventarioEntry.COLLECTION_NAME);
     }
 
     public void createMovimientoInv(String idUsuario, String idProducto, int cantidad, String tipo,
                                     final FirestoreCallback<Boolean> callback) {
-        DocumentReference usuarioRef = db.collection(UsuarioEntry.COLLECTION_NAME).document(idUsuario);
-        DocumentReference productoRef = db.collection(ProductoEntry.COLLECTION_NAME).document(idProducto);
+        DocumentReference usuarioRef = db.collection(sessionManager.getEmpresa()+"_persons/").document(idUsuario);
+        DocumentReference productoRef = db.collection(sessionManager.getEmpresa()+"_AProductos/").document(idProducto);
 
         Map<String, Object> movimientoInvData = new HashMap<>();
         movimientoInvData.put(MovimientoInventarioEntry.FIELD_USUARIO_REF, usuarioRef);

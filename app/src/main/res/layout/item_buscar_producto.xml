@@ -22,9 +22,10 @@
             android:id="@+id/tvTipoProducto"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
             android:layout_row="0"
             android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Tipo de Producto"
             android:textColor="#000"
             android:textStyle="bold" />
@@ -36,6 +37,7 @@
             android:layout_row="0"
             android:layout_column="1"
             android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Precio"
             android:textColor="#000" />
 
@@ -43,9 +45,10 @@
             android:id="@+id/tvModelo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
             android:layout_row="1"
             android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Modelo"
             android:textColor="#000" />
 
@@ -53,9 +56,10 @@
             android:id="@+id/tvStock"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
             android:layout_row="1"
             android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Stock"
             android:textColor="#000" />
 
@@ -66,6 +70,7 @@
             android:layout_row="2"
             android:layout_column="0"
             android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Marca"
             android:textColor="#000" />
     </GridLayout>
@@ -81,7 +86,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Agregar" />
+            android:backgroundTint="#1BB273"
+            android:fontFamily="@font/montserratregular"
+            android:text="Agregar"
+            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>
 

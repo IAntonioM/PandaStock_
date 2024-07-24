@@ -1,8 +1,11 @@
 package com.app.pandastock.firebase;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.app.pandastock.models.Venta;
+import com.app.pandastock.utils.SessionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,10 +27,12 @@ import java.util.Map;
 public class VentaDao {
     private FirebaseFirestore db;
     private CollectionReference ventasRef;
+    private SessionManager sessionManager;
 
-    public VentaDao() {
+    public VentaDao(Context context) {
         db = FirebaseFirestore.getInstance();
-        ventasRef = db.collection(FirestoreContract.VentaEntry.COLLECTION_NAME);
+        sessionManager = new SessionManager(context);
+        ventasRef = db.collection(sessionManager.getEmpresa()+"_"+FirestoreContract.VentaEntry.COLLECTION_NAME);
     }
 
     public void insertVenta(Venta venta, final FirestoreCallback<Boolean, String> callback) {

@@ -33,46 +33,65 @@ public class UsuarioDao {
         session=new SessionManager(context);
     }
 
-    // Crear usuario en Firestore y obtener el ID asignado por Firebase
-    public void register(String nombres, String apellidos, String email, String password, final FirestoreCallback<Boolean> callback) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    public void register(final String empresa, final String email, final String password, final FirestoreCallback<Boolean> callback) {
+        // Consultar si ya existe un usuario con el mismo nombre y email
+        db.collection(UsuarioEntry.COLLECTION_NAME)
+                .whereEqualTo(UsuarioEntry.FIELD_NOMBRE, empresa)
+                .whereEqualTo(UsuarioEntry.FIELD_EMAIL, email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
-                                // Crear un objeto Map para almacenar los datos del usuario
-                                Map<String, Object> userData = new HashMap<>();
-                                userData.put(UsuarioEntry.DOC_ID, user.getUid());
-                                userData.put(UsuarioEntry.FIELD_NOMBRE, nombres);
-                                userData.put(UsuarioEntry.FIELD_APELLIDO, apellidos);
-                                userData.put(UsuarioEntry.FIELD_EMAIL, email);
+                            if (!task.getResult().isEmpty()) {
+                                // Usuario ya registrado
+                                callback.onComplete(false); // Devuelve false si el usuario ya está registrado
+                            } else {
+                                // No existe usuario registrado con el mismo nombre y email, proceder con el registro
+                                mAuth.createUserWithEmailAndPassword(email, password)
+                                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (task.isSuccessful()) {
+                                                    FirebaseUser user = mAuth.getCurrentUser();
+                                                    if (user != null) {
+                                                        // Crear un objeto Map para almacenar los datos del usuario
+                                                        Map<String, Object> userData = new HashMap<>();
+                                                        userData.put(UsuarioEntry.DOC_ID, user.getUid());
+                                                        userData.put(UsuarioEntry.FIELD_NOMBRE, empresa);
+                                                        userData.put(UsuarioEntry.FIELD_EMAIL, email);
 
-                                // Guardar los datos del usuario en Firestore
-                                db.collection(UsuarioEntry.COLLECTION_NAME).document(user.getUid())
-                                        .set(userData)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                callback.onComplete(true); // Devuelve true si el registro fue exitoso
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                callback.onComplete(false); // Devuelve false si hubo un error al guardar los datos
+                                                        // Guardar los datos del usuario en Firestore
+                                                        db.collection(UsuarioEntry.COLLECTION_NAME).document(user.getUid())
+                                                                .set(userData)
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        callback.onComplete(true); // Devuelve true si el registro fue exitoso
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        callback.onComplete(false); // Devuelve false si hubo un error al guardar los datos
+                                                                    }
+                                                                });
+                                                    }
+                                                } else {
+                                                    callback.onComplete(false); // Devuelve false si el registro de usuario falló
+                                                }
                                             }
                                         });
                             }
                         } else {
-                            callback.onComplete(false); // Devuelve false si el registro de usuario falló
+                            callback.onComplete(false); // Devuelve false si hubo un error al realizar la consulta
                         }
                     }
                 });
     }
 
-// Verificar si el usuario existe en Firestore y obtener sus datos
+
+    // Verificar si el usuario existe en Firestore y obtener sus datos
     public void login(String email, String password, final FirestoreCallback<Boolean> callback) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -91,10 +110,9 @@ public class UsuarioDao {
                                                     DocumentSnapshot document = task.getResult();
                                                     if (document.exists()) {
                                                         // Obtener los datos del documento
-                                                        String nombres = document.getString(UsuarioEntry.FIELD_NOMBRE);
-                                                        String apellidos = document.getString(UsuarioEntry.FIELD_APELLIDO);
+                                                        String empresa = document.getString(UsuarioEntry.FIELD_NOMBRE);
                                                         // Guardar los datos en SharedPreferences
-                                                        session.createLoginSession(user.getUid(),nombres,apellidos,email);
+                                                        session.createLoginSession(empresa,email);
                                                         callback.onComplete(true);
                                                     } else {
                                                         callback.onComplete(false);

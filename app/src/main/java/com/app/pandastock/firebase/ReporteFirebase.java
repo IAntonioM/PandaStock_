@@ -1,165 +1,138 @@
 package com.app.pandastock.firebase;
 
-import com.app.pandastock.firebase.FirestoreContract;
+import android.content.Context;
+import android.widget.Toast;
+
+import com.app.pandastock.models.VentaData;
+import com.app.pandastock.models.VentaProductoData;
+import com.app.pandastock.utils.SessionManager;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ReporteFirebase {
 
     private FirebaseFirestore db;
+    private SessionManager sessionManager;
+    private Context context;
 
-    public ReporteFirebase() {
+    public ReporteFirebase(Context context) {
         this.db = FirebaseFirestore.getInstance();
+        sessionManager = new SessionManager(context);
+        this.context=context;
     }
 
-    public interface FirestoreCallback {
-        void onCallback(List<DataEntry> dataEntries);
+    public interface FirestoreCallback<T> {
+        void onCallback(T dataEntries);
+    }
+    public interface FirestoreCallback2<T> {
+        void onCallback(List<T> dataEntries);
     }
 
-    public void obtenerDatosProductosVendidos(FirestoreCallback callback) {
-        CollectionReference ventasRef = db.collection(FirestoreContract.VentaEntry.COLLECTION_NAME);
+    public void obtenerDatosVentasPorTiempo(FirestoreCallback2<VentaData> callback) {
+        CollectionReference ventasRef = db.collection(sessionManager.getEmpresa() + "_" + FirestoreContract.VentaEntry.COLLECTION_NAME);
 
         ventasRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Map<String, Integer> productosVendidos = new HashMap<>();
+                Map<String, Double> ventasPorFecha = new HashMap<>();
 
-                for (QueryDocumentSnapshot ventaDoc : task.getResult()) {
-                    CollectionReference detallesVentaRef = ventaDoc.getReference().collection(FirestoreContract.DetalleVentaEntry.COLLECTION_NAME);
-                    detallesVentaRef.get().addOnCompleteListener(detalleTask -> {
-                        if (detalleTask.isSuccessful()) {
-                            for (QueryDocumentSnapshot detalleDoc : detalleTask.getResult()) {
-                                String productoRef = detalleDoc.getString(FirestoreContract.DetalleVentaEntry.FIELD_PRODUCTO_REF);
-                                int cantidad = detalleDoc.getLong(FirestoreContract.DetalleVentaEntry.FIELD_CANTIDAD).intValue();
+                for (DocumentSnapshot document : task.getResult()) {
+                    Double montoTotal = document.getDouble(FirestoreContract.VentaEntry.FIELD_MONTO_TOTAL);
+                    Date fechaCreacion = document.getDate(FirestoreContract.VentaEntry.FIELD_FECHA_CREACION);
 
-                                if (productosVendidos.containsKey(productoRef)) {
-                                    productosVendidos.put(productoRef, productosVendidos.get(productoRef) + cantidad);
-                                } else {
-                                    productosVendidos.put(productoRef, cantidad);
-                                }
-                            }
-                            List<DataEntry> dataEntries = new ArrayList<>();
-                            for (Map.Entry<String, Integer> entry : productosVendidos.entrySet()) {
-                                dataEntries.add(new ValueDataEntry(entry.getKey(), entry.getValue()));
-                            }
-                            callback.onCallback(dataEntries);
+                    if (montoTotal != null && fechaCreacion != null) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM");
+                        String fechaFormateada = dateFormat.format(fechaCreacion);
+
+                        if (ventasPorFecha.containsKey(fechaFormateada)) {
+                            Double montoActual = ventasPorFecha.get(fechaFormateada);
+                            ventasPorFecha.put(fechaFormateada, montoActual + montoTotal);
+                        } else {
+                            ventasPorFecha.put(fechaFormateada, montoTotal);
                         }
-                    });
+                    }
                 }
+
+                List<VentaData> datos = new ArrayList<>();
+                for (Map.Entry<String, Double> entry : ventasPorFecha.entrySet()) {
+                    datos.add(new VentaData(entry.getKey(), entry.getValue()));
+                }
+
+                callback.onCallback(datos);
+            } else {
+                callback.onCallback(null);
             }
         });
     }
 
-    public void obtenerDatosTipoProductoVendido(FirestoreCallback callback) {
-        CollectionReference ventasRef = db.collection(FirestoreContract.VentaEntry.COLLECTION_NAME);
-
-        ventasRef.get().addOnCompleteListener(task -> {
+    public void obtenerDatosVentasPorProducto(FirestoreCallback<List<VentaProductoData>> callback) {
+        CollectionReference detallesVentaRef = db.collection(sessionManager.getEmpresa() + "_" + FirestoreContract.DetalleVentaEntry.COLLECTION_NAME);
+        detallesVentaRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Map<String, Integer> tiposProductoVendidos = new HashMap<>();
+                Map<String, Double> gananciasPorProducto = new HashMap<>();
+                Map<String, Integer> cantidadPorProducto = new HashMap<>();
 
-                for (QueryDocumentSnapshot ventaDoc : task.getResult()) {
-                    CollectionReference detallesVentaRef = ventaDoc.getReference().collection(FirestoreContract.DetalleVentaEntry.COLLECTION_NAME);
-                    detallesVentaRef.get().addOnCompleteListener(detalleTask -> {
-                        if (detalleTask.isSuccessful()) {
-                            for (QueryDocumentSnapshot detalleDoc : detalleTask.getResult()) {
-                                DocumentReference productoRef = db.document(detalleDoc.getString(FirestoreContract.DetalleVentaEntry.FIELD_PRODUCTO_REF));
-                                productoRef.get().addOnCompleteListener(productoTask -> {
-                                    if (productoTask.isSuccessful()) {
-                                        String tipoProductoRef = productoTask.getResult().getString(FirestoreContract.ProductoEntry.FIELD_TIPO_PRODUCTO_REF);
-                                        int cantidad = detalleDoc.getLong(FirestoreContract.DetalleVentaEntry.FIELD_CANTIDAD).intValue();
+                for (DocumentSnapshot document : task.getResult()) {
+                    DocumentReference productoRef = document.getDocumentReference(FirestoreContract.DetalleVentaEntry.FIELD_PRODUCTO_REF);
+                    int cantidad = document.getLong(FirestoreContract.DetalleVentaEntry.FIELD_CANTIDAD).intValue();
+                    double subtotal = document.getDouble(FirestoreContract.DetalleVentaEntry.FIELD_SUBTOTAL);
+                    String productoId = productoRef.getId();
 
-                                        if (tiposProductoVendidos.containsKey(tipoProductoRef)) {
-                                            tiposProductoVendidos.put(tipoProductoRef, tiposProductoVendidos.get(tipoProductoRef) + cantidad);
-                                        } else {
-                                            tiposProductoVendidos.put(tipoProductoRef, cantidad);
+                    // Actualizar ganancias
+                    Double gananciaActual = gananciasPorProducto.get(productoId);
+                    gananciasPorProducto.put(productoId, (gananciaActual == null ? 0 : gananciaActual) + subtotal);
+
+                    // Actualizar cantidad vendida
+                    Integer cantidadActual = cantidadPorProducto.get(productoId);
+                    cantidadPorProducto.put(productoId, (cantidadActual == null ? 0 : cantidadActual) + cantidad);
+                }
+
+                List<VentaProductoData> datos = new ArrayList<>();
+                AtomicInteger pendingRequests = new AtomicInteger(gananciasPorProducto.size());
+
+                for (Map.Entry<String, Double> entry : gananciasPorProducto.entrySet()) {
+                    String productoId = entry.getKey();
+                    double gananciaTotal = entry.getValue();
+                    int cantidadTotal = cantidadPorProducto.get(productoId);
+
+                    db.collection(sessionManager.getEmpresa() + "_" + FirestoreContract.ProductoEntry.COLLECTION_NAME)
+                            .document(productoId)
+                            .get()
+                            .addOnSuccessListener(documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    String modelo = documentSnapshot.getString(FirestoreContract.ProductoEntry.FIELD_MODELO);
+                                    DocumentReference tipoProductoRef = documentSnapshot.getDocumentReference(FirestoreContract.ProductoEntry.FIELD_TIPO_PRODUCTO_REF);
+
+                                    tipoProductoRef.get().addOnSuccessListener(tipoProductoSnapshot -> {
+                                        if (tipoProductoSnapshot.exists()) {
+                                            String tipoProducto = tipoProductoSnapshot.getString(FirestoreContract.TipoProductoEntry.FIELD_NOMBRE);
+                                            datos.add(new VentaProductoData(cantidadTotal, gananciaTotal, tipoProducto + " - " + modelo));
+
+                                            if (pendingRequests.decrementAndGet() == 0) {
+                                                callback.onCallback(datos);
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                            List<DataEntry> dataEntries = new ArrayList<>();
-                            for (Map.Entry<String, Integer> entry : tiposProductoVendidos.entrySet()) {
-                                dataEntries.add(new ValueDataEntry(entry.getKey(), entry.getValue()));
-                            }
-                            callback.onCallback(dataEntries);
-                        }
-                    });
+                                    });
+                                }
+                            });
                 }
+            } else {
+                callback.onCallback(null);
             }
         });
     }
 
-    public void obtenerDatosVentasPorTiempo(FirestoreCallback callback) {
-        CollectionReference ventasRef = db.collection(FirestoreContract.VentaEntry.COLLECTION_NAME);
 
-        ventasRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Map<String, Integer> ventasPorFecha = new HashMap<>();
 
-                for (QueryDocumentSnapshot ventaDoc : task.getResult()) {
-                    String fecha = ventaDoc.getDate(FirestoreContract.VentaEntry.FIELD_FECHA_CREACION).toString();
-                    int montoTotal = ventaDoc.getLong(FirestoreContract.VentaEntry.FIELD_MONTO_TOTAL).intValue();
 
-                    if (ventasPorFecha.containsKey(fecha)) {
-                        ventasPorFecha.put(fecha, ventasPorFecha.get(fecha) + montoTotal);
-                    } else {
-                        ventasPorFecha.put(fecha, montoTotal);
-                    }
-                }
-                List<DataEntry> dataEntries = new ArrayList<>();
-                for (Map.Entry<String, Integer> entry : ventasPorFecha.entrySet()) {
-                    dataEntries.add(new ValueDataEntry(entry.getKey(), entry.getValue()));
-                }
-                callback.onCallback(dataEntries);
-            }
-        });
-    }
-
-    public void obtenerDatosMovimientoInventario(FirestoreCallback callback) {
-        CollectionReference movimientoInventarioRef = db.collection(FirestoreContract.MovimientoInventarioEntry.COLLECTION_NAME);
-
-        movimientoInventarioRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Map<String, int[]> movimientosInventario = new HashMap<>();
-
-                for (QueryDocumentSnapshot movimientoDoc : task.getResult()) {
-                    String productoRef = movimientoDoc.getString(FirestoreContract.MovimientoInventarioEntry.FIELD_PRODUCTO_REF);
-                    int cantidad = movimientoDoc.getLong(FirestoreContract.MovimientoInventarioEntry.FIELD_CANTIDAD).intValue();
-                    String tipo = movimientoDoc.getString(FirestoreContract.MovimientoInventarioEntry.FIELD_TIPO);
-
-                    if (!movimientosInventario.containsKey(productoRef)) {
-                        movimientosInventario.put(productoRef, new int[]{0, 0});
-                    }
-
-                    if ("Entrada".equals(tipo)) {
-                        movimientosInventario.get(productoRef)[0] += cantidad;
-                    } else if ("Salida".equals(tipo)) {
-                        movimientosInventario.get(productoRef)[1] += cantidad;
-                    }
-                }
-                List<DataEntry> dataEntries = new ArrayList<>();
-                for (Map.Entry<String, int[]> entry : movimientosInventario.entrySet()) {
-                    dataEntries.add(new CustomDataEntry(entry.getKey(), entry.getValue()[0], entry.getValue()[1]));
-                }
-                callback.onCallback(dataEntries);
-            }
-        });
-    }
-
-    private class CustomDataEntry extends ValueDataEntry {
-        CustomDataEntry(String x, Number value, Number value2) {
-            super(x, value);
-            setValue("value2", value2);
-        }
-    }
 }
-
 

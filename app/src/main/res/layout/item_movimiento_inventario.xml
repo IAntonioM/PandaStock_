@@ -25,6 +25,7 @@
             android:layout_row="0"
             android:layout_column="0"
             android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Codigo"
             android:textColor="#000"
             android:textStyle="bold" />
@@ -36,6 +37,7 @@
             android:layout_row="1"
             android:layout_column="0"
             android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Usuario"
             android:textColor="#000" />
 
@@ -46,6 +48,7 @@
             android:layout_row="2"
             android:layout_column="0"
             android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Producto"
             android:textColor="#000" />
 
@@ -57,6 +60,7 @@
             android:layout_row="0"
             android:layout_column="1"
             android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Cantidad"
             android:textColor="#000" />
 
@@ -67,6 +71,7 @@
             android:layout_row="1"
             android:layout_column="1"
             android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Tipo"
             android:textColor="#000" />
 
@@ -77,6 +82,7 @@
             android:layout_row="2"
             android:layout_column="1"
             android:layout_columnWeight="1"
+            android:fontFamily="@font/montserratregular"
             android:text="Fecha"
             android:textColor="#000" />
     </GridLayout>
